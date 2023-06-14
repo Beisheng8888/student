@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.grade.air.mapper.SsDormitoryInformationMapper">
+    
+    <resultMap type="SsDormitoryInformation" id="SsDormitoryInformationResult">
+        <result property="dormitoryId"    column="dormitory_id"    />
+        <result property="dormitoryName"    column="dormitory_name"    />
+        <result property="building"    column="building"    />
+        <result property="floor"    column="floor"    />
+        <result property="studentName"    column="student_name"    />
+        <result property="userId"    column="user_id"    />
+    </resultMap>
+
+    <sql id="selectSsDormitoryInformationVo">
+        select dormitory_id, dormitory_name, building, floor, student_name, user_id from ss_dormitory_information
+    </sql>
+
+    <select id="selectSsDormitoryInformationList" parameterType="SsDormitoryInformation" resultMap="SsDormitoryInformationResult">
+        <include refid="selectSsDormitoryInformationVo"/>
+        <where>  
+        </where>
+    </select>
+    
+    <select id="selectSsDormitoryInformationByDormitoryId" parameterType="Long" resultMap="SsDormitoryInformationResult">
+        <include refid="selectSsDormitoryInformationVo"/>
+        where dormitory_id = #{dormitoryId}
+    </select>
+        
+    <insert id="insertSsDormitoryInformation" parameterType="SsDormitoryInformation" useGeneratedKeys="true" keyProperty="dormitoryId">
+        insert into ss_dormitory_information
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="dormitoryName != null">dormitory_name,</if>
+            <if test="building != null">building,</if>
+            <if test="floor != null">floor,</if>
+            <if test="studentName != null">student_name,</if>
+            <if test="userId != null">user_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="dormitoryName != null">#{dormitoryName},</if>
+            <if test="building != null">#{building},</if>
+            <if test="floor != null">#{floor},</if>
+            <if test="studentName != null">#{studentName},</if>
+            <if test="userId != null">#{userId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSsDormitoryInformation" parameterType="SsDormitoryInformation">
+        update ss_dormitory_information
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="dormitoryName != null">dormitory_name = #{dormitoryName},</if>
+            <if test="building != null">building = #{building},</if>
+            <if test="floor != null">floor = #{floor},</if>
+            <if test="studentName != null">student_name = #{studentName},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+        </trim>
+        where dormitory_id = #{dormitoryId}
+    </update>
+
+    <delete id="deleteSsDormitoryInformationByDormitoryId" parameterType="Long">
+        delete from ss_dormitory_information where dormitory_id = #{dormitoryId}
+    </delete>
+
+    <delete id="deleteSsDormitoryInformationByDormitoryIds" parameterType="String">
+        delete from ss_dormitory_information where dormitory_id in 
+        <foreach item="dormitoryId" collection="array" open="(" separator="," close=")">
+            #{dormitoryId}
+        </foreach>
+    </delete>
+</mapper>

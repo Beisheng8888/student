@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.grade.air.mapper.LqDisciplinaryRecordsMapper">
+    
+    <resultMap type="LqDisciplinaryRecords" id="LqDisciplinaryRecordsResult">
+        <result property="recordId"    column="record_id"    />
+        <result property="studentName"    column="student_name"    />
+        <result property="recordDate"    column="record_date"    />
+        <result property="behavior"    column="behavior"    />
+        <result property="location"    column="location"    />
+        <result property="punishment"    column="punishment"    />
+        <result property="responsiblePerson"    column="responsible_person"    />
+        <result property="result"    column="result"    />
+        <result property="userId"    column="user_id"    />
+    </resultMap>
+
+    <sql id="selectLqDisciplinaryRecordsVo">
+        select record_id, student_name, record_date, behavior,
+        location, punishment, responsible_person, result, user_id from lq_disciplinary_records recuit
+    </sql>
+
+    <select id="selectLqDisciplinaryRecordsList" parameterType="LqDisciplinaryRecords" resultMap="LqDisciplinaryRecordsResult">
+        <include refid="selectLqDisciplinaryRecordsVo"/>
+        <where>  
+            <if test="studentName != null  and studentName != ''"> and student_name like concat('%', #{studentName}, '%')</if>
+            ${params.dataScope}
+        </where>
+    </select>
+    
+    <select id="selectLqDisciplinaryRecordsByRecordId" parameterType="Long" resultMap="LqDisciplinaryRecordsResult">
+        <include refid="selectLqDisciplinaryRecordsVo"/>
+        where record_id = #{recordId}
+    </select>
+        
+    <insert id="insertLqDisciplinaryRecords" parameterType="LqDisciplinaryRecords" useGeneratedKeys="true" keyProperty="recordId">
+        insert into lq_disciplinary_records
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="studentName != null">student_name,</if>
+            <if test="recordDate != null">record_date,</if>
+            <if test="behavior != null">behavior,</if>
+            <if test="location != null">location,</if>
+            <if test="punishment != null">punishment,</if>
+            <if test="responsiblePerson != null">responsible_person,</if>
+            <if test="result != null">result,</if>
+            <if test="userId != null">user_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="studentName != null">#{studentName},</if>
+            <if test="recordDate != null">#{recordDate},</if>
+            <if test="behavior != null">#{behavior},</if>
+            <if test="location != null">#{location},</if>
+            <if test="punishment != null">#{punishment},</if>
+            <if test="responsiblePerson != null">#{responsiblePerson},</if>
+            <if test="result != null">#{result},</if>
+            <if test="userId != null">#{userId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateLqDisciplinaryRecords" parameterType="LqDisciplinaryRecords">
+        update lq_disciplinary_records
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="studentName != null">student_name = #{studentName},</if>
+            <if test="recordDate != null">record_date = #{recordDate},</if>
+            <if test="behavior != null">behavior = #{behavior},</if>
+            <if test="location != null">location = #{location},</if>
+            <if test="punishment != null">punishment = #{punishment},</if>
+            <if test="responsiblePerson != null">responsible_person = #{responsiblePerson},</if>
+            <if test="result != null">result = #{result},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+        </trim>
+        where record_id = #{recordId}
+    </update>
+
+    <delete id="deleteLqDisciplinaryRecordsByRecordId" parameterType="Long">
+        delete from lq_disciplinary_records where record_id = #{recordId}
+    </delete>
+
+    <delete id="deleteLqDisciplinaryRecordsByRecordIds" parameterType="String">
+        delete from lq_disciplinary_records where record_id in 
+        <foreach item="recordId" collection="array" open="(" separator="," close=")">
+            #{recordId}
+        </foreach>
+    </delete>
+</mapper>

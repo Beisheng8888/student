@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.grade.air.mapper.SsNetworkFaultRepairApplicationMapper">
+    
+    <resultMap type="SsNetworkFaultRepairApplication" id="SsNetworkFaultRepairApplicationResult">
+        <result property="applicationId"    column="application_id"    />
+        <result property="dormitoryName"    column="dormitory_name"    />
+        <result property="reportDate"    column="report_date"    />
+        <result property="reportDescription"    column="report_description"    />
+    </resultMap>
+
+    <sql id="selectSsNetworkFaultRepairApplicationVo">
+        select application_id, dormitory_name, report_date, report_description from ss_network_fault_repair_application
+    </sql>
+
+    <select id="selectSsNetworkFaultRepairApplicationList" parameterType="SsNetworkFaultRepairApplication" resultMap="SsNetworkFaultRepairApplicationResult">
+        <include refid="selectSsNetworkFaultRepairApplicationVo"/>
+        <where>  
+        </where>
+    </select>
+    
+    <select id="selectSsNetworkFaultRepairApplicationByApplicationId" parameterType="Long" resultMap="SsNetworkFaultRepairApplicationResult">
+        <include refid="selectSsNetworkFaultRepairApplicationVo"/>
+        where application_id = #{applicationId}
+    </select>
+        
+    <insert id="insertSsNetworkFaultRepairApplication" parameterType="SsNetworkFaultRepairApplication" useGeneratedKeys="true" keyProperty="applicationId">
+        insert into ss_network_fault_repair_application
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="dormitoryName != null">dormitory_name,</if>
+            <if test="reportDate != null">report_date,</if>
+            <if test="reportDescription != null">report_description,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="dormitoryName != null">#{dormitoryName},</if>
+            <if test="reportDate != null">#{reportDate},</if>
+            <if test="reportDescription != null">#{reportDescription},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSsNetworkFaultRepairApplication" parameterType="SsNetworkFaultRepairApplication">
+        update ss_network_fault_repair_application
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="dormitoryName != null">dormitory_name = #{dormitoryName},</if>
+            <if test="reportDate != null">report_date = #{reportDate},</if>
+            <if test="reportDescription != null">report_description = #{reportDescription},</if>
+        </trim>
+        where application_id = #{applicationId}
+    </update>
+
+    <delete id="deleteSsNetworkFaultRepairApplicationByApplicationId" parameterType="Long">
+        delete from ss_network_fault_repair_application where application_id = #{applicationId}
+    </delete>
+
+    <delete id="deleteSsNetworkFaultRepairApplicationByApplicationIds" parameterType="String">
+        delete from ss_network_fault_repair_application where application_id in 
+        <foreach item="applicationId" collection="array" open="(" separator="," close=")">
+            #{applicationId}
+        </foreach>
+    </delete>
+</mapper>

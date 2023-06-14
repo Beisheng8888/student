@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.grade.air.mapper.GzAcademicrecordsMapper">
+    
+    <resultMap type="GzAcademicrecords" id="GzAcademicrecordsResult">
+        <result property="recordID"    column="recordID"    />
+        <result property="studentName"    column="studentName"    />
+        <result property="courseName"    column="courseName"    />
+        <result property="grade"    column="grade"    />
+        <result property="classRank"    column="classRank"    />
+        <result property="gpa"    column="gpa"    />
+        <result property="userId"    column="user_id"    />
+        <result property="aclass"    column="aclass"    />
+        <result property="name"      column="name"/>
+
+    </resultMap>
+
+    <sql id="selectGzAcademicrecordsVo">
+        select recordID, studentName, courseName, grade,
+         classRank, gpa, user_id,aclass,`name` from gz_academicrecords recuit
+    </sql>
+
+    <select id="selectGzAcademicrecordsList" parameterType="GzAcademicrecords" resultMap="GzAcademicrecordsResult">
+        <include refid="selectGzAcademicrecordsVo"/>
+        <where>
+            ${params.dataScope}
+        </where>
+    </select>
+    
+    <select id="selectGzAcademicrecordsByRecordID" parameterType="Long" resultMap="GzAcademicrecordsResult">
+        <include refid="selectGzAcademicrecordsVo"/>
+        where recordID = #{recordID}
+    </select>
+        
+    <insert id="insertGzAcademicrecords" parameterType="GzAcademicrecords" useGeneratedKeys="true" keyProperty="recordID">
+       INSERT INTO gz_academicrecords (
+
+       courseName,
+       grade,
+       classRank,
+       gpa,
+       user_id,
+       aclass,
+       `name`)
+        VALUES (#{courseName}, #{grade}, #{classRank}, #{gpa}, #{userId}, #{aclass}, #{name})
+    </insert>
+
+    <update id="updateGzAcademicrecords" parameterType="GzAcademicrecords">
+        update gz_academicrecords
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="studentName != null">studentName = #{studentName},</if>
+            <if test="courseName != null">courseName = #{courseName},</if>
+            <if test="grade != null">grade = #{grade},</if>
+            <if test="classRank != null">classRank = #{classRank},</if>
+            <if test="gpa != null">gpa = #{gpa},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="aclass != null">user_id = #{aclass},</if>
+        </trim>
+        where recordID = #{recordID}
+    </update>
+
+    <delete id="deleteGzAcademicrecordsByRecordID" parameterType="Long">
+        delete from gz_academicrecords where recordID = #{recordID}
+    </delete>
+
+    <delete id="deleteGzAcademicrecordsByRecordIDs" parameterType="String">
+        delete from gz_academicrecords where recordID in 
+        <foreach item="recordID" collection="array" open="(" separator="," close=")">
+            #{recordID}
+        </foreach>
+    </delete>
+</mapper>

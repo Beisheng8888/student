@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.grade.air.mapper.YxSchoolinformationMapper">
+    
+    <resultMap type="YxSchoolinformation" id="YxSchoolinformationResult">
+        <result property="informationID"    column="informationID"    />
+        <result property="studentTitle"    column="student_Title"    />
+        <result property="studentContent"    column="student_Content"    />
+        <result property="studentName"    column="student_name"    />
+    </resultMap>
+
+    <sql id="selectYxSchoolinformationVo">
+        select informationID, student_Title, student_Content, student_name from yx_schoolinformation
+    </sql>
+
+    <select id="selectYxSchoolinformationList" parameterType="YxSchoolinformation" resultMap="YxSchoolinformationResult">
+        <include refid="selectYxSchoolinformationVo"/>
+        <where>  
+        </where>
+    </select>
+    
+    <select id="selectYxSchoolinformationByInformationID" parameterType="Long" resultMap="YxSchoolinformationResult">
+        <include refid="selectYxSchoolinformationVo"/>
+        where informationID = #{informationID}
+    </select>
+        
+    <insert id="insertYxSchoolinformation" parameterType="YxSchoolinformation" useGeneratedKeys="true" keyProperty="informationID">
+        insert into yx_schoolinformation
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="studentTitle != null">student_Title,</if>
+            <if test="studentContent != null">student_Content,</if>
+            <if test="studentName != null">student_name,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="studentTitle != null">#{studentTitle},</if>
+            <if test="studentContent != null">#{studentContent},</if>
+            <if test="studentName != null">#{studentName},</if>
+         </trim>
+    </insert>
+
+    <update id="updateYxSchoolinformation" parameterType="YxSchoolinformation">
+        update yx_schoolinformation
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="studentTitle != null">student_Title = #{studentTitle},</if>
+            <if test="studentContent != null">student_Content = #{studentContent},</if>
+            <if test="studentName != null">student_name = #{studentName},</if>
+        </trim>
+        where informationID = #{informationID}
+    </update>
+
+    <delete id="deleteYxSchoolinformationByInformationID" parameterType="Long">
+        delete from yx_schoolinformation where informationID = #{informationID}
+    </delete>
+
+    <delete id="deleteYxSchoolinformationByInformationIDs" parameterType="String">
+        delete from yx_schoolinformation where informationID in 
+        <foreach item="informationID" collection="array" open="(" separator="," close=")">
+            #{informationID}
+        </foreach>
+    </delete>
+</mapper>

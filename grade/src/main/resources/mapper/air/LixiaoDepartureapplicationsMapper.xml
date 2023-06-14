@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.grade.air.mapper.LixiaoDepartureapplicationsMapper">
+    
+    <resultMap type="LixiaoDepartureapplications" id="LixiaoDepartureapplicationsResult">
+        <result property="applicationID"    column="applicationID"    />
+        <result property="studentName"    column="studentName"    />
+        <result property="applicationDate"    column="applicationDate"    />
+        <result property="departureDate"    column="departureDate"    />
+        <result property="reason"    column="reason"    />
+        <result property="userId"    column="user_id"    />
+    </resultMap>
+
+    <sql id="selectLixiaoDepartureapplicationsVo">
+        select applicationID, studentName, applicationDate, departureDate, reason, user_id from lixiao_departureapplications
+    </sql>
+
+    <select id="selectLixiaoDepartureapplicationsList" parameterType="LixiaoDepartureapplications" resultMap="LixiaoDepartureapplicationsResult">
+        <include refid="selectLixiaoDepartureapplicationsVo"/>
+        <where>  
+        </where>
+    </select>
+    
+    <select id="selectLixiaoDepartureapplicationsByApplicationID" parameterType="Long" resultMap="LixiaoDepartureapplicationsResult">
+        <include refid="selectLixiaoDepartureapplicationsVo"/>
+        where applicationID = #{applicationID}
+    </select>
+        
+    <insert id="insertLixiaoDepartureapplications" parameterType="LixiaoDepartureapplications" useGeneratedKeys="true" keyProperty="applicationID">
+        insert into lixiao_departureapplications
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="studentName != null">studentName,</if>
+            <if test="applicationDate != null">applicationDate,</if>
+            <if test="departureDate != null">departureDate,</if>
+            <if test="reason != null">reason,</if>
+            <if test="userId != null">user_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="studentName != null">#{studentName},</if>
+            <if test="applicationDate != null">#{applicationDate},</if>
+            <if test="departureDate != null">#{departureDate},</if>
+            <if test="reason != null">#{reason},</if>
+            <if test="userId != null">#{userId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateLixiaoDepartureapplications" parameterType="LixiaoDepartureapplications">
+        update lixiao_departureapplications
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="studentName != null">studentName = #{studentName},</if>
+            <if test="applicationDate != null">applicationDate = #{applicationDate},</if>
+            <if test="departureDate != null">departureDate = #{departureDate},</if>
+            <if test="reason != null">reason = #{reason},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+        </trim>
+        where applicationID = #{applicationID}
+    </update>
+
+    <delete id="deleteLixiaoDepartureapplicationsByApplicationID" parameterType="Long">
+        delete from lixiao_departureapplications where applicationID = #{applicationID}
+    </delete>
+
+    <delete id="deleteLixiaoDepartureapplicationsByApplicationIDs" parameterType="String">
+        delete from lixiao_departureapplications where applicationID in 
+        <foreach item="applicationID" collection="array" open="(" separator="," close=")">
+            #{applicationID}
+        </foreach>
+    </delete>
+</mapper>

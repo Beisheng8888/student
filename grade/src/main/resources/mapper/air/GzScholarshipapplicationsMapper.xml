@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.grade.air.mapper.GzScholarshipapplicationsMapper">
+    
+    <resultMap type="GzScholarshipapplications" id="GzScholarshipapplicationsResult">
+        <result property="applicationID"    column="applicationID"    />
+        <result property="studentName"    column="studentName"    />
+        <result property="applicationDate"    column="applicationDate"    />
+        <result property="amount"    column="amount"    />
+        <result property="userId"    column="user_id"    />
+    </resultMap>
+
+    <sql id="selectGzScholarshipapplicationsVo">
+        select applicationID, studentName, applicationDate, amount, user_id
+        from gz_scholarshipapplications recuit
+    </sql>
+
+    <select id="selectGzScholarshipapplicationsList" parameterType="GzScholarshipapplications" resultMap="GzScholarshipapplicationsResult">
+        <include refid="selectGzScholarshipapplicationsVo"/>
+        <where>
+            ${params.dataScope}
+        </where>
+    </select>
+    
+    <select id="selectGzScholarshipapplicationsByApplicationID" parameterType="Long" resultMap="GzScholarshipapplicationsResult">
+        <include refid="selectGzScholarshipapplicationsVo"/>
+        where applicationID = #{applicationID}
+    </select>
+        
+    <insert id="insertGzScholarshipapplications" parameterType="GzScholarshipapplications" useGeneratedKeys="true" keyProperty="applicationID">
+        insert into gz_scholarshipapplications
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="studentName != null">studentName,</if>
+            <if test="applicationDate != null">applicationDate,</if>
+            <if test="amount != null">amount,</if>
+            <if test="userId != null">user_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="studentName != null">#{studentName},</if>
+            <if test="applicationDate != null">#{applicationDate},</if>
+            <if test="amount != null">#{amount},</if>
+            <if test="userId != null">#{userId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateGzScholarshipapplications" parameterType="GzScholarshipapplications">
+        update gz_scholarshipapplications
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="studentName != null">studentName = #{studentName},</if>
+            <if test="applicationDate != null">applicationDate = #{applicationDate},</if>
+            <if test="amount != null">amount = #{amount},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+        </trim>
+        where applicationID = #{applicationID}
+    </update>
+
+    <delete id="deleteGzScholarshipapplicationsByApplicationID" parameterType="Long">
+        delete from gz_scholarshipapplications where applicationID = #{applicationID}
+    </delete>
+
+    <delete id="deleteGzScholarshipapplicationsByApplicationIDs" parameterType="String">
+        delete from gz_scholarshipapplications where applicationID in 
+        <foreach item="applicationID" collection="array" open="(" separator="," close=")">
+            #{applicationID}
+        </foreach>
+    </delete>
+</mapper>

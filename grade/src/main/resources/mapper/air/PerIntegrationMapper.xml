@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.grade.air.mapper.PerIntegrationMapper">
+    
+    <resultMap type="PerIntegration" id="PerIntegrationResult">
+        <result property="id"    column="id"    />
+        <result property="ethnicity"    column="ethnicity"    />
+        <result property="nnt"    column="nnt"    />
+        <result property="result"    column="result"    />
+        <result property="elective"    column="elective"    />
+        <result property="gradeName"    column="grade_name"    />
+        <result property="学院"    column="学院"    />
+    </resultMap>
+
+    <sql id="selectPerIntegrationVo">
+        select id, ethnicity, nnt, result, elective, grade_name, 学院 from per_integration
+    </sql>
+
+    <select id="selectPerIntegrationList" parameterType="PerIntegration" resultMap="PerIntegrationResult">
+        <include refid="selectPerIntegrationVo"/>
+        <where>  
+        </where>
+    </select>
+    
+    <select id="selectPerIntegrationById" parameterType="Long" resultMap="PerIntegrationResult">
+        <include refid="selectPerIntegrationVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertPerIntegration" parameterType="PerIntegration" useGeneratedKeys="true" keyProperty="id">
+        insert into per_integration
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="ethnicity != null">ethnicity,</if>
+            <if test="nnt != null">nnt,</if>
+            <if test="result != null">result,</if>
+            <if test="elective != null">elective,</if>
+            <if test="gradeName != null">grade_name,</if>
+            <if test="学院 != null">学院,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="ethnicity != null">#{ethnicity},</if>
+            <if test="nnt != null">#{nnt},</if>
+            <if test="result != null">#{result},</if>
+            <if test="elective != null">#{elective},</if>
+            <if test="gradeName != null">#{gradeName},</if>
+            <if test="学院 != null">#{学院},</if>
+         </trim>
+    </insert>
+
+    <update id="updatePerIntegration" parameterType="PerIntegration">
+        update per_integration
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="ethnicity != null">ethnicity = #{ethnicity},</if>
+            <if test="nnt != null">nnt = #{nnt},</if>
+            <if test="result != null">result = #{result},</if>
+            <if test="elective != null">elective = #{elective},</if>
+            <if test="gradeName != null">grade_name = #{gradeName},</if>
+            <if test="学院 != null">学院 = #{学院},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deletePerIntegrationById" parameterType="Long">
+        delete from per_integration where id = #{id}
+    </delete>
+
+    <delete id="deletePerIntegrationByIds" parameterType="String">
+        delete from per_integration where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

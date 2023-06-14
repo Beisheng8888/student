@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.grade.air.mapper.YxRegistrationOpghMapper">
+    
+    <resultMap type="YxRegistrationOpgh" id="YxRegistrationOpghResult">
+        <result property="id"    column="id"    />
+        <result property="studentName"    column="studentName"    />
+        <result property="trainNumber"    column="trainNumber"    />
+        <result property="flightNumber"    column="flightNumber"    />
+        <result property="arrivalTime"    column="arrivalTime"    />
+        <result property="pickupLocation"    column="pickupLocation"    />
+        <result property="userId"    column="user_id"    />
+    </resultMap>
+
+    <sql id="selectYxRegistrationOpghVo">
+        select id, studentName, trainNumber, flightNumber,
+         arrivalTime, pickupLocation, user_id from yx_registration_opgh recuit
+    </sql>
+
+    <select id="selectYxRegistrationOpghList" parameterType="YxRegistrationOpgh" resultMap="YxRegistrationOpghResult">
+        <include refid="selectYxRegistrationOpghVo"/>
+        <where>
+            ${params.dataScope}
+        </where>
+    </select>
+    
+    <select id="selectYxRegistrationOpghById" parameterType="Long" resultMap="YxRegistrationOpghResult">
+        <include refid="selectYxRegistrationOpghVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertYxRegistrationOpgh" parameterType="YxRegistrationOpgh" useGeneratedKeys="true" keyProperty="id">
+        insert into yx_registration_opgh
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="studentName != null">studentName,</if>
+            <if test="trainNumber != null">trainNumber,</if>
+            <if test="flightNumber != null">flightNumber,</if>
+            <if test="arrivalTime != null">arrivalTime,</if>
+            <if test="pickupLocation != null">pickupLocation,</if>
+            <if test="userId != null">user_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="studentName != null">#{studentName},</if>
+            <if test="trainNumber != null">#{trainNumber},</if>
+            <if test="flightNumber != null">#{flightNumber},</if>
+            <if test="arrivalTime != null">#{arrivalTime},</if>
+            <if test="pickupLocation != null">#{pickupLocation},</if>
+            <if test="userId != null">#{userId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateYxRegistrationOpgh" parameterType="YxRegistrationOpgh">
+        update yx_registration_opgh
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="studentName != null">studentName = #{studentName},</if>
+            <if test="trainNumber != null">trainNumber = #{trainNumber},</if>
+            <if test="flightNumber != null">flightNumber = #{flightNumber},</if>
+            <if test="arrivalTime != null">arrivalTime = #{arrivalTime},</if>
+            <if test="pickupLocation != null">pickupLocation = #{pickupLocation},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteYxRegistrationOpghById" parameterType="Long">
+        delete from yx_registration_opgh where id = #{id}
+    </delete>
+
+    <delete id="deleteYxRegistrationOpghByIds" parameterType="String">
+        delete from yx_registration_opgh where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.grade.air.mapper.YxOpRegisMapper">
+    
+    <resultMap type="YxOpRegis" id="YxOpRegisResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="studentNumber"    column="student_number"    />
+        <result property="submissionTime"    column="submission_time"    />
+        <result property="arrivalTime"    column="arrival_time"    />
+        <result property="arrivalLocation"    column="arrival_location"    />
+        <result property="userId"    column="user_id"    />
+    </resultMap>
+
+    <sql id="selectYxOpRegisVo">
+        select id, name, student_number, submission_time, arrival_time,
+         arrival_location, user_id from yx_op_regis recuit
+    </sql>
+
+    <select id="selectYxOpRegisList" parameterType="YxOpRegis" resultMap="YxOpRegisResult">
+        <include refid="selectYxOpRegisVo"/>
+        <where>
+            ${params.dataScope}
+        </where>
+    </select>
+    
+    <select id="selectYxOpRegisById" parameterType="Long" resultMap="YxOpRegisResult">
+        <include refid="selectYxOpRegisVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertYxOpRegis" parameterType="YxOpRegis" useGeneratedKeys="true" keyProperty="id">
+        insert into yx_op_regis
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">name,</if>
+            <if test="studentNumber != null and studentNumber != ''">student_number,</if>
+            <if test="submissionTime != null">submission_time,</if>
+            <if test="arrivalTime != null">arrival_time,</if>
+            <if test="arrivalLocation != null">arrival_location,</if>
+            <if test="userId != null">user_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="studentNumber != null and studentNumber != ''">#{studentNumber},</if>
+            <if test="submissionTime != null">#{submissionTime},</if>
+            <if test="arrivalTime != null">#{arrivalTime},</if>
+            <if test="arrivalLocation != null">#{arrivalLocation},</if>
+            <if test="userId != null">#{userId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateYxOpRegis" parameterType="YxOpRegis">
+        update yx_op_regis
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="studentNumber != null and studentNumber != ''">student_number = #{studentNumber},</if>
+            <if test="submissionTime != null">submission_time = #{submissionTime},</if>
+            <if test="arrivalTime != null">arrival_time = #{arrivalTime},</if>
+            <if test="arrivalLocation != null">arrival_location = #{arrivalLocation},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteYxOpRegisById" parameterType="Long">
+        delete from yx_op_regis where id = #{id}
+    </delete>
+
+    <delete id="deleteYxOpRegisByIds" parameterType="String">
+        delete from yx_op_regis where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

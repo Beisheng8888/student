@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.grade.air.mapper.GzStudentdisciplineMapper">
+    
+    <resultMap type="GzStudentdiscipline" id="GzStudentdisciplineResult">
+        <result property="recordID"    column="recordID"    />
+        <result property="studentName"    column="studentName"    />
+        <result property="violationDate"    column="violationDate"    />
+        <result property="violationContent"    column="violationContent"    />
+        <result property="disciplinaryAction"    column="disciplinaryAction"    />
+        <result property="userId"    column="user_id"    />
+    </resultMap>
+
+    <sql id="selectGzStudentdisciplineVo">
+        select recordID, studentName, violationDate, violationContent,
+        disciplinaryAction, user_id from gz_studentdiscipline recuit
+    </sql>
+
+    <select id="selectGzStudentdisciplineList" parameterType="GzStudentdiscipline" resultMap="GzStudentdisciplineResult">
+        <include refid="selectGzStudentdisciplineVo"/>
+        <where>
+            ${params.dataScope}
+        </where>
+    </select>
+    
+    <select id="selectGzStudentdisciplineByRecordID" parameterType="Long" resultMap="GzStudentdisciplineResult">
+        <include refid="selectGzStudentdisciplineVo"/>
+        where recordID = #{recordID}
+    </select>
+        
+    <insert id="insertGzStudentdiscipline" parameterType="GzStudentdiscipline" useGeneratedKeys="true" keyProperty="recordID">
+        insert into gz_studentdiscipline
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="studentName != null">studentName,</if>
+            <if test="violationDate != null">violationDate,</if>
+            <if test="violationContent != null">violationContent,</if>
+            <if test="disciplinaryAction != null">disciplinaryAction,</if>
+            <if test="userId != null">user_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="studentName != null">#{studentName},</if>
+            <if test="violationDate != null">#{violationDate},</if>
+            <if test="violationContent != null">#{violationContent},</if>
+            <if test="disciplinaryAction != null">#{disciplinaryAction},</if>
+            <if test="userId != null">#{userId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateGzStudentdiscipline" parameterType="GzStudentdiscipline">
+        update gz_studentdiscipline
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="studentName != null">studentName = #{studentName},</if>
+            <if test="violationDate != null">violationDate = #{violationDate},</if>
+            <if test="violationContent != null">violationContent = #{violationContent},</if>
+            <if test="disciplinaryAction != null">disciplinaryAction = #{disciplinaryAction},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+        </trim>
+        where recordID = #{recordID}
+    </update>
+
+    <delete id="deleteGzStudentdisciplineByRecordID" parameterType="Long">
+        delete from gz_studentdiscipline where recordID = #{recordID}
+    </delete>
+
+    <delete id="deleteGzStudentdisciplineByRecordIDs" parameterType="String">
+        delete from gz_studentdiscipline where recordID in 
+        <foreach item="recordID" collection="array" open="(" separator="," close=")">
+            #{recordID}
+        </foreach>
+    </delete>
+</mapper>

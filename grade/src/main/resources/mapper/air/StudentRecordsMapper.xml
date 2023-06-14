@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.grade.air.mapper.StudentRecordsMapper">
+    
+    <resultMap type="StudentRecords" id="StudentRecordsResult">
+        <result property="studentId"    column="student_id"    />
+        <result property="name"    column="name"    />
+        <result property="gender"    column="gender"    />
+        <result property="dateOfBirth"    column="date_of_birth"    />
+        <result property="address"    column="address"    />
+        <result property="phoneNumber"    column="phone_number"    />
+        <result property="email"    column="email"    />
+        <result property="guardianName"    column="guardian_name"    />
+        <result property="guardianPhone"    column="guardian_phone"    />
+        <result property="admissionDate"    column="admission_date"    />
+        <result property="graduationDate"    column="graduation_date"    />
+        <result property="aclass"    column="aclass"    />
+        <result property="major"    column="major"    />
+        <result property="previousSchool"    column="previous_school"    />
+        <result property="academicYear"    column="academic_year"    />
+    </resultMap>
+
+    <sql id="selectStudentRecordsVo">
+        select student_id, name, gender, date_of_birth, address, phone_number, email, guardian_name, guardian_phone, admission_date, graduation_date, aclass, major, previous_school, academic_year from student_records
+    </sql>
+
+    <select id="selectStudentRecordsList" parameterType="StudentRecords" resultMap="StudentRecordsResult">
+        <include refid="selectStudentRecordsVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="gender != null  and gender != ''"> and gender = #{gender}</if>
+            <if test="dateOfBirth != null "> and date_of_birth = #{dateOfBirth}</if>
+            <if test="address != null  and address != ''"> and address = #{address}</if>
+            <if test="phoneNumber != null  and phoneNumber != ''"> and phone_number = #{phoneNumber}</if>
+            <if test="email != null  and email != ''"> and email = #{email}</if>
+            <if test="guardianName != null  and guardianName != ''"> and guardian_name like concat('%', #{guardianName}, '%')</if>
+            <if test="guardianPhone != null  and guardianPhone != ''"> and guardian_phone = #{guardianPhone}</if>
+            <if test="admissionDate != null "> and admission_date = #{admissionDate}</if>
+            <if test="graduationDate != null "> and graduation_date = #{graduationDate}</if>
+            <if test="aclass != null  and aclass != ''"> and aclass = #{aclass}</if>
+            <if test="major != null  and major != ''"> and major = #{major}</if>
+            <if test="previousSchool != null  and previousSchool != ''"> and previous_school = #{previousSchool}</if>
+            <if test="academicYear != null "> and academic_year = #{academicYear}</if>
+        </where>
+    </select>
+    
+    <select id="selectStudentRecordsByStudentId" parameterType="Long" resultMap="StudentRecordsResult">
+        <include refid="selectStudentRecordsVo"/>
+        where student_id = #{studentId}
+    </select>
+        
+    <insert id="insertStudentRecords" parameterType="StudentRecords">
+        insert into student_records
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="studentId != null">student_id,</if>
+            <if test="name != null">name,</if>
+            <if test="gender != null">gender,</if>
+            <if test="dateOfBirth != null">date_of_birth,</if>
+            <if test="address != null">address,</if>
+            <if test="phoneNumber != null">phone_number,</if>
+            <if test="email != null">email,</if>
+            <if test="guardianName != null">guardian_name,</if>
+            <if test="guardianPhone != null">guardian_phone,</if>
+            <if test="admissionDate != null">admission_date,</if>
+            <if test="graduationDate != null">graduation_date,</if>
+            <if test="aclass != null">aclass,</if>
+            <if test="major != null">major,</if>
+            <if test="previousSchool != null">previous_school,</if>
+            <if test="academicYear != null">academic_year,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="studentId != null">#{studentId},</if>
+            <if test="name != null">#{name},</if>
+            <if test="gender != null">#{gender},</if>
+            <if test="dateOfBirth != null">#{dateOfBirth},</if>
+            <if test="address != null">#{address},</if>
+            <if test="phoneNumber != null">#{phoneNumber},</if>
+            <if test="email != null">#{email},</if>
+            <if test="guardianName != null">#{guardianName},</if>
+            <if test="guardianPhone != null">#{guardianPhone},</if>
+            <if test="admissionDate != null">#{admissionDate},</if>
+            <if test="graduationDate != null">#{graduationDate},</if>
+            <if test="aclass != null">#{aclass},</if>
+            <if test="major != null">#{major},</if>
+            <if test="previousSchool != null">#{previousSchool},</if>
+            <if test="academicYear != null">#{academicYear},</if>
+         </trim>
+    </insert>
+
+    <update id="updateStudentRecords" parameterType="StudentRecords">
+        update student_records
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null">name = #{name},</if>
+            <if test="gender != null">gender = #{gender},</if>
+            <if test="dateOfBirth != null">date_of_birth = #{dateOfBirth},</if>
+            <if test="address != null">address = #{address},</if>
+            <if test="phoneNumber != null">phone_number = #{phoneNumber},</if>
+            <if test="email != null">email = #{email},</if>
+            <if test="guardianName != null">guardian_name = #{guardianName},</if>
+            <if test="guardianPhone != null">guardian_phone = #{guardianPhone},</if>
+            <if test="admissionDate != null">admission_date = #{admissionDate},</if>
+            <if test="graduationDate != null">graduation_date = #{graduationDate},</if>
+            <if test="aclass != null">aclass = #{aclass},</if>
+            <if test="major != null">major = #{major},</if>
+            <if test="previousSchool != null">previous_school = #{previousSchool},</if>
+            <if test="academicYear != null">academic_year = #{academicYear},</if>
+        </trim>
+        where student_id = #{studentId}
+    </update>
+
+    <delete id="deleteStudentRecordsByStudentId" parameterType="Long">
+        delete from student_records where student_id = #{studentId}
+    </delete>
+
+    <delete id="deleteStudentRecordsByStudentIds" parameterType="String">
+        delete from student_records where student_id in 
+        <foreach item="studentId" collection="array" open="(" separator="," close=")">
+            #{studentId}
+        </foreach>
+    </delete>
+</mapper>

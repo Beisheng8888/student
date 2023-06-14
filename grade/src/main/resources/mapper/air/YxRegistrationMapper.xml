@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.grade.air.mapper.YxRegistrationMapper">
+    
+    <resultMap type="YxRegistration" id="YxRegistrationResult">
+        <result property="registrationID"    column="registrationID"    />
+        <result property="studentName"    column="studentName"    />
+        <result property="trainNumber"    column="trainNumber"    />
+        <result property="flightNumber"    column="flightNumber"    />
+        <result property="arrivalTime"    column="arrivalTime"    />
+        <result property="pickupLocation"    column="pickupLocation"    />
+        <result property="approvalStatus"    column="approvalStatus"    />
+        <result property="userId"    column="user_id"    />
+    </resultMap>
+
+    <sql id="selectYxRegistrationVo">
+        select registrationID, studentName, trainNumber,
+        flightNumber, arrivalTime, pickupLocation,
+        approvalStatus, user_id from yx_registration recuit
+    </sql>
+
+    <select id="selectYxRegistrationList" parameterType="YxRegistration" resultMap="YxRegistrationResult">
+        <include refid="selectYxRegistrationVo"/>
+        <where>
+            ${params.dataScope}
+        </where>
+    </select>
+    
+    <select id="selectYxRegistrationByRegistrationID" parameterType="Long" resultMap="YxRegistrationResult">
+        <include refid="selectYxRegistrationVo"/>
+        where registrationID = #{registrationID}
+    </select>
+        
+    <insert id="insertYxRegistration" parameterType="YxRegistration" useGeneratedKeys="true" keyProperty="registrationID">
+        insert into yx_registration
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="studentName != null">studentName,</if>
+            <if test="trainNumber != null">trainNumber,</if>
+            <if test="flightNumber != null">flightNumber,</if>
+            <if test="arrivalTime != null">arrivalTime,</if>
+            <if test="pickupLocation != null">pickupLocation,</if>
+            <if test="approvalStatus != null">approvalStatus,</if>
+            <if test="userId != null">user_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="studentName != null">#{studentName},</if>
+            <if test="trainNumber != null">#{trainNumber},</if>
+            <if test="flightNumber != null">#{flightNumber},</if>
+            <if test="arrivalTime != null">#{arrivalTime},</if>
+            <if test="pickupLocation != null">#{pickupLocation},</if>
+            <if test="approvalStatus != null">#{approvalStatus},</if>
+            <if test="userId != null">#{userId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateYxRegistration" parameterType="YxRegistration">
+        update yx_registration
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="studentName != null">studentName = #{studentName},</if>
+            <if test="trainNumber != null">trainNumber = #{trainNumber},</if>
+            <if test="flightNumber != null">flightNumber = #{flightNumber},</if>
+            <if test="arrivalTime != null">arrivalTime = #{arrivalTime},</if>
+            <if test="pickupLocation != null">pickupLocation = #{pickupLocation},</if>
+            <if test="approvalStatus != null">approvalStatus = #{approvalStatus},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+        </trim>
+        where registrationID = #{registrationID}
+    </update>
+
+    <delete id="deleteYxRegistrationByRegistrationID" parameterType="Long">
+        delete from yx_registration where registrationID = #{registrationID}
+    </delete>
+
+    <delete id="deleteYxRegistrationByRegistrationIDs" parameterType="String">
+        delete from yx_registration where registrationID in 
+        <foreach item="registrationID" collection="array" open="(" separator="," close=")">
+            #{registrationID}
+        </foreach>
+    </delete>
+</mapper>

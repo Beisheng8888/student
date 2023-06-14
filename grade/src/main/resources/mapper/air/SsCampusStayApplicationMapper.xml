@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.grade.air.mapper.SsCampusStayApplicationMapper">
+    
+    <resultMap type="SsCampusStayApplication" id="SsCampusStayApplicationResult">
+        <result property="applicationId"    column="application_id"    />
+        <result property="studentId"    column="student_id"    />
+        <result property="startDate"    column="start_date"    />
+        <result property="endDate"    column="end_date"    />
+        <result property="reason"    column="reason"    />
+        <result property="userId"    column="user_id"    />
+    </resultMap>
+
+    <sql id="selectSsCampusStayApplicationVo">
+        select application_id, student_id, start_date, end_date, reason, user_id from ss_campus_stay_application
+    </sql>
+
+    <select id="selectSsCampusStayApplicationList" parameterType="SsCampusStayApplication" resultMap="SsCampusStayApplicationResult">
+        <include refid="selectSsCampusStayApplicationVo"/>
+        <where>  
+        </where>
+    </select>
+    
+    <select id="selectSsCampusStayApplicationByApplicationId" parameterType="Long" resultMap="SsCampusStayApplicationResult">
+        <include refid="selectSsCampusStayApplicationVo"/>
+        where application_id = #{applicationId}
+    </select>
+        
+    <insert id="insertSsCampusStayApplication" parameterType="SsCampusStayApplication" useGeneratedKeys="true" keyProperty="applicationId">
+        insert into ss_campus_stay_application
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="studentId != null">student_id,</if>
+            <if test="startDate != null">start_date,</if>
+            <if test="endDate != null">end_date,</if>
+            <if test="reason != null">reason,</if>
+            <if test="userId != null">user_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="studentId != null">#{studentId},</if>
+            <if test="startDate != null">#{startDate},</if>
+            <if test="endDate != null">#{endDate},</if>
+            <if test="reason != null">#{reason},</if>
+            <if test="userId != null">#{userId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSsCampusStayApplication" parameterType="SsCampusStayApplication">
+        update ss_campus_stay_application
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="studentId != null">student_id = #{studentId},</if>
+            <if test="startDate != null">start_date = #{startDate},</if>
+            <if test="endDate != null">end_date = #{endDate},</if>
+            <if test="reason != null">reason = #{reason},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+        </trim>
+        where application_id = #{applicationId}
+    </update>
+
+    <delete id="deleteSsCampusStayApplicationByApplicationId" parameterType="Long">
+        delete from ss_campus_stay_application where application_id = #{applicationId}
+    </delete>
+
+    <delete id="deleteSsCampusStayApplicationByApplicationIds" parameterType="String">
+        delete from ss_campus_stay_application where application_id in 
+        <foreach item="applicationId" collection="array" open="(" separator="," close=")">
+            #{applicationId}
+        </foreach>
+    </delete>
+</mapper>

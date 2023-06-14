@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.grade.air.mapper.LqDeryMapper">
+    
+    <resultMap type="LqDery" id="LqDeryResult">
+        <result property="id"    column="id"    />
+        <result property="gradeClass"    column="grade_class"    />
+        <result property="admissionDate"    column="admissionDate"    />
+        <result property="academicSystem"    column="academicSystem"    />
+        <result property="department"    column="department"    />
+        <result property="major"    column="major"    />
+        <result property="studentName"    column="student_Name"    />
+        <result property="maTr"    column="ma_tr"    />
+        <result property="userId"    column="user_id"    />
+    </resultMap>
+
+    <sql id="selectLqDeryVo">
+        select id, grade_class, admissionDate, academicSystem, department,
+         major, student_Name, ma_tr, user_id from lq_dery recuit
+    </sql>
+
+    <select id="selectLqDeryList" parameterType="LqDery" resultMap="LqDeryResult">
+        <include refid="selectLqDeryVo"/>
+        <where>  
+            <if test="studentName != null  and studentName != ''"> and student_Name like concat('%', #{studentName}, '%')</if>
+            ${params.dataScope}
+        </where>
+    </select>
+    
+    <select id="selectLqDeryById" parameterType="Long" resultMap="LqDeryResult">
+        <include refid="selectLqDeryVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertLqDery" parameterType="LqDery" useGeneratedKeys="true" keyProperty="id">
+        insert into lq_dery
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="gradeClass != null">grade_class,</if>
+            <if test="admissionDate != null">admissionDate,</if>
+            <if test="academicSystem != null">academicSystem,</if>
+            <if test="department != null">department,</if>
+            <if test="major != null">major,</if>
+            <if test="studentName != null">student_Name,</if>
+            <if test="maTr != null">ma_tr,</if>
+            <if test="userId != null">user_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="gradeClass != null">#{gradeClass},</if>
+            <if test="admissionDate != null">#{admissionDate},</if>
+            <if test="academicSystem != null">#{academicSystem},</if>
+            <if test="department != null">#{department},</if>
+            <if test="major != null">#{major},</if>
+            <if test="studentName != null">#{studentName},</if>
+            <if test="maTr != null">#{maTr},</if>
+            <if test="userId != null">#{userId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateLqDery" parameterType="LqDery">
+        update lq_dery
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="gradeClass != null">grade_class = #{gradeClass},</if>
+            <if test="admissionDate != null">admissionDate = #{admissionDate},</if>
+            <if test="academicSystem != null">academicSystem = #{academicSystem},</if>
+            <if test="department != null">department = #{department},</if>
+            <if test="major != null">major = #{major},</if>
+            <if test="studentName != null">student_Name = #{studentName},</if>
+            <if test="maTr != null">ma_tr = #{maTr},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteLqDeryById" parameterType="Long">
+        delete from lq_dery where id = #{id}
+    </delete>
+
+    <delete id="deleteLqDeryByIds" parameterType="String">
+        delete from lq_dery where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

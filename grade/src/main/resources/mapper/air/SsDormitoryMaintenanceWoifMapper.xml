@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.grade.air.mapper.SsDormitoryMaintenanceWoifMapper">
+    
+    <resultMap type="SsDormitoryMaintenanceWoif" id="SsDormitoryMaintenanceWoifResult">
+        <result property="id"    column="id"    />
+        <result property="dormitoryName"    column="dormitory_name"    />
+        <result property="reportDate"    column="report_date"    />
+        <result property="reportDescription"    column="report_description"    />
+        <result property="status"    column="status"    />
+        <result property="statusTypeop"    column="status_typeop"    />
+    </resultMap>
+
+    <sql id="selectSsDormitoryMaintenanceWoifVo">
+        select id, dormitory_name, report_date, report_description, status, status_typeop from ss_dormitory_maintenance_woif
+    </sql>
+
+    <select id="selectSsDormitoryMaintenanceWoifList" parameterType="SsDormitoryMaintenanceWoif" resultMap="SsDormitoryMaintenanceWoifResult">
+        <include refid="selectSsDormitoryMaintenanceWoifVo"/>
+        <where>  
+        </where>
+    </select>
+    
+    <select id="selectSsDormitoryMaintenanceWoifById" parameterType="Long" resultMap="SsDormitoryMaintenanceWoifResult">
+        <include refid="selectSsDormitoryMaintenanceWoifVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertSsDormitoryMaintenanceWoif" parameterType="SsDormitoryMaintenanceWoif" useGeneratedKeys="true" keyProperty="id">
+        insert into ss_dormitory_maintenance_woif
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="dormitoryName != null">dormitory_name,</if>
+            <if test="reportDate != null">report_date,</if>
+            <if test="reportDescription != null">report_description,</if>
+            <if test="status != null">status,</if>
+            <if test="statusTypeop != null">status_typeop,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="dormitoryName != null">#{dormitoryName},</if>
+            <if test="reportDate != null">#{reportDate},</if>
+            <if test="reportDescription != null">#{reportDescription},</if>
+            <if test="status != null">#{status},</if>
+            <if test="statusTypeop != null">#{statusTypeop},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSsDormitoryMaintenanceWoif" parameterType="SsDormitoryMaintenanceWoif">
+        update ss_dormitory_maintenance_woif
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="dormitoryName != null">dormitory_name = #{dormitoryName},</if>
+            <if test="reportDate != null">report_date = #{reportDate},</if>
+            <if test="reportDescription != null">report_description = #{reportDescription},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="statusTypeop != null">status_typeop = #{statusTypeop},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSsDormitoryMaintenanceWoifById" parameterType="Long">
+        delete from ss_dormitory_maintenance_woif where id = #{id}
+    </delete>
+
+    <delete id="deleteSsDormitoryMaintenanceWoifByIds" parameterType="String">
+        delete from ss_dormitory_maintenance_woif where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.grade.air.mapper.GzStudenthealthMapper">
+    
+    <resultMap type="GzStudenthealth" id="GzStudenthealthResult">
+        <result property="recordID"    column="recordID"    />
+        <result property="studentName"    column="studentName"    />
+        <result property="medicalDate"    column="medicalDate"    />
+        <result property="height"    column="height"    />
+        <result property="weight"    column="weight"    />
+        <result property="otherHealthInfo"    column="otherHealthInfo"    />
+        <result property="userId"    column="user_id"    />
+    </resultMap>
+
+    <sql id="selectGzStudenthealthVo">
+        select recordID, studentName, medicalDate, height, weight,
+         otherHealthInfo, user_id from gz_studenthealth recuit
+    </sql>
+
+    <select id="selectGzStudenthealthList" parameterType="GzStudenthealth" resultMap="GzStudenthealthResult">
+        <include refid="selectGzStudenthealthVo"/>
+        <where>
+            ${params.dataScope}
+        </where>
+    </select>
+    
+    <select id="selectGzStudenthealthByRecordID" parameterType="Long" resultMap="GzStudenthealthResult">
+        <include refid="selectGzStudenthealthVo"/>
+        where recordID = #{recordID}
+    </select>
+        
+    <insert id="insertGzStudenthealth" parameterType="GzStudenthealth" useGeneratedKeys="true" keyProperty="recordID">
+        insert into gz_studenthealth
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="studentName != null">studentName,</if>
+            <if test="medicalDate != null">medicalDate,</if>
+            <if test="height != null">height,</if>
+            <if test="weight != null">weight,</if>
+            <if test="otherHealthInfo != null">otherHealthInfo,</if>
+            <if test="userId != null">user_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="studentName != null">#{studentName},</if>
+            <if test="medicalDate != null">#{medicalDate},</if>
+            <if test="height != null">#{height},</if>
+            <if test="weight != null">#{weight},</if>
+            <if test="otherHealthInfo != null">#{otherHealthInfo},</if>
+            <if test="userId != null">#{userId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateGzStudenthealth" parameterType="GzStudenthealth">
+        update gz_studenthealth
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="studentName != null">studentName = #{studentName},</if>
+            <if test="medicalDate != null">medicalDate = #{medicalDate},</if>
+            <if test="height != null">height = #{height},</if>
+            <if test="weight != null">weight = #{weight},</if>
+            <if test="otherHealthInfo != null">otherHealthInfo = #{otherHealthInfo},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+        </trim>
+        where recordID = #{recordID}
+    </update>
+
+    <delete id="deleteGzStudenthealthByRecordID" parameterType="Long">
+        delete from gz_studenthealth where recordID = #{recordID}
+    </delete>
+
+    <delete id="deleteGzStudenthealthByRecordIDs" parameterType="String">
+        delete from gz_studenthealth where recordID in 
+        <foreach item="recordID" collection="array" open="(" separator="," close=")">
+            #{recordID}
+        </foreach>
+    </delete>
+</mapper>

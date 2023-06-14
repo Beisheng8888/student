@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.grade.air.mapper.GzRewardspunishmentsMapper">
+    
+    <resultMap type="GzRewardspunishments" id="GzRewardspunishmentsResult">
+        <result property="recordID"    column="recordID"    />
+        <result property="studentName"    column="studentName"    />
+        <result property="type"    column="type"    />
+        <result property="date"    column="date"    />
+        <result property="reason"    column="reason"    />
+        <result property="userId"    column="user_id"    />
+    </resultMap>
+
+    <sql id="selectGzRewardspunishmentsVo">
+        select recordID, studentName, type, date, reason, user_id from gz_rewardspunishments recuit
+    </sql>
+
+    <select id="selectGzRewardspunishmentsList" parameterType="GzRewardspunishments" resultMap="GzRewardspunishmentsResult">
+        <include refid="selectGzRewardspunishmentsVo"/>
+        <where>
+            ${params.dataScope}
+        </where>
+    </select>
+    
+    <select id="selectGzRewardspunishmentsByRecordID" parameterType="Long" resultMap="GzRewardspunishmentsResult">
+        <include refid="selectGzRewardspunishmentsVo"/>
+        where recordID = #{recordID}
+    </select>
+        
+    <insert id="insertGzRewardspunishments" parameterType="GzRewardspunishments" useGeneratedKeys="true" keyProperty="recordID">
+        insert into gz_rewardspunishments
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="studentName != null">studentName,</if>
+            <if test="type != null">type,</if>
+            <if test="date != null">date,</if>
+            <if test="reason != null">reason,</if>
+            <if test="userId != null">user_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="studentName != null">#{studentName},</if>
+            <if test="type != null">#{type},</if>
+            <if test="date != null">#{date},</if>
+            <if test="reason != null">#{reason},</if>
+            <if test="userId != null">#{userId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateGzRewardspunishments" parameterType="GzRewardspunishments">
+        update gz_rewardspunishments
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="studentName != null">studentName = #{studentName},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="date != null">date = #{date},</if>
+            <if test="reason != null">reason = #{reason},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+        </trim>
+        where recordID = #{recordID}
+    </update>
+
+    <delete id="deleteGzRewardspunishmentsByRecordID" parameterType="Long">
+        delete from gz_rewardspunishments where recordID = #{recordID}
+    </delete>
+
+    <delete id="deleteGzRewardspunishmentsByRecordIDs" parameterType="String">
+        delete from gz_rewardspunishments where recordID in 
+        <foreach item="recordID" collection="array" open="(" separator="," close=")">
+            #{recordID}
+        </foreach>
+    </delete>
+</mapper>

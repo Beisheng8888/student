@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.grade.air.mapper.LqAcademicrecordsMapper">
+    
+    <resultMap type="LqAcademicrecords" id="LqAcademicrecordsResult">
+        <result property="studentID"    column="studentID"    />
+        <result property="subject"    column="subject"    />
+        <result property="grade"    column="grade"    />
+        <result property="gpa"    column="gpa"    />
+        <result property="rank"    column="rank"    />
+        <result property="credits"    column="credits"    />
+        <result property="userId"    column="user_id"    />
+        <result property="studentName"    column="student_Name"    />
+    </resultMap>
+
+    <sql id="selectLqAcademicrecordsVo">
+        select studentID, subject, grade, gpa,
+        rank, credits, user_id, student_Name from lq_academicrecords recuit
+    </sql>
+
+    <select id="selectLqAcademicrecordsList" parameterType="LqAcademicrecords" resultMap="LqAcademicrecordsResult">
+        <include refid="selectLqAcademicrecordsVo"/>
+        <where>  
+            <if test="studentName != null  and studentName != ''"> and student_Name like concat('%', #{studentName}, '%')</if>
+            ${params.dataScope}
+        </where>
+    </select>
+    
+    <select id="selectLqAcademicrecordsByStudentID" parameterType="Long" resultMap="LqAcademicrecordsResult">
+        <include refid="selectLqAcademicrecordsVo"/>
+        where studentID = #{studentID}
+    </select>
+        
+    <insert id="insertLqAcademicrecords" parameterType="LqAcademicrecords" useGeneratedKeys="true" keyProperty="studentID">
+        insert into lq_academicrecords
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="subject != null">subject,</if>
+            <if test="grade != null">grade,</if>
+            <if test="gpa != null">gpa,</if>
+            <if test="rank != null">rank,</if>
+            <if test="credits != null">credits,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="studentName != null">student_Name,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="subject != null">#{subject},</if>
+            <if test="grade != null">#{grade},</if>
+            <if test="gpa != null">#{gpa},</if>
+            <if test="rank != null">#{rank},</if>
+            <if test="credits != null">#{credits},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="studentName != null">#{studentName},</if>
+         </trim>
+    </insert>
+
+    <update id="updateLqAcademicrecords" parameterType="LqAcademicrecords">
+        update lq_academicrecords
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="subject != null">subject = #{subject},</if>
+            <if test="grade != null">grade = #{grade},</if>
+            <if test="gpa != null">gpa = #{gpa},</if>
+            <if test="rank != null">rank = #{rank},</if>
+            <if test="credits != null">credits = #{credits},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="studentName != null">student_Name = #{studentName},</if>
+        </trim>
+        where studentID = #{studentID}
+    </update>
+
+    <delete id="deleteLqAcademicrecordsByStudentID" parameterType="Long">
+        delete from lq_academicrecords where studentID = #{studentID}
+    </delete>
+
+    <delete id="deleteLqAcademicrecordsByStudentIDs" parameterType="String">
+        delete from lq_academicrecords where studentID in 
+        <foreach item="studentID" collection="array" open="(" separator="," close=")">
+            #{studentID}
+        </foreach>
+    </delete>
+</mapper>

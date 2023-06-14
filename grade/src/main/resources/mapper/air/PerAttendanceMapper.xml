@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.grade.air.mapper.PerAttendanceMapper">
+    
+    <resultMap type="PerAttendance" id="PerAttendanceResult">
+        <result property="id"    column="id"    />
+        <result property="courseName"    column="courseName"    />
+        <result property="studentName"    column="student_Name"    />
+        <result property="attendanceStatus"    column="attendance_Status"    />
+        <result property="salary"    column="salary"    />
+        <result property="gradeName"    column="grade_name"    />
+        <result property="xueyuan"    column="xueyuan"    />
+        <result property="userId"    column="user_id"    />
+    </resultMap>
+
+    <sql id="selectPerAttendanceVo">
+        select id, courseName, student_Name, attendance_Status, salary, grade_name, xueyuan, user_id from per_attendance
+    </sql>
+
+    <select id="selectPerAttendanceList" parameterType="PerAttendance" resultMap="PerAttendanceResult">
+        <include refid="selectPerAttendanceVo"/>
+        <where>  
+        </where>
+    </select>
+    
+    <select id="selectPerAttendanceById" parameterType="Long" resultMap="PerAttendanceResult">
+        <include refid="selectPerAttendanceVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertPerAttendance" parameterType="PerAttendance" useGeneratedKeys="true" keyProperty="id">
+        insert into per_attendance
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="courseName != null">courseName,</if>
+            <if test="studentName != null">student_Name,</if>
+            <if test="attendanceStatus != null">attendance_Status,</if>
+            <if test="salary != null">salary,</if>
+            <if test="gradeName != null">grade_name,</if>
+            <if test="xueyuan != null">xueyuan,</if>
+            <if test="userId != null">user_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="courseName != null">#{courseName},</if>
+            <if test="studentName != null">#{studentName},</if>
+            <if test="attendanceStatus != null">#{attendanceStatus},</if>
+            <if test="salary != null">#{salary},</if>
+            <if test="gradeName != null">#{gradeName},</if>
+            <if test="xueyuan != null">#{xueyuan},</if>
+            <if test="userId != null">#{userId},</if>
+         </trim>
+    </insert>
+
+    <update id="updatePerAttendance" parameterType="PerAttendance">
+        update per_attendance
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="courseName != null">courseName = #{courseName},</if>
+            <if test="studentName != null">student_Name = #{studentName},</if>
+            <if test="attendanceStatus != null">attendance_Status = #{attendanceStatus},</if>
+            <if test="salary != null">salary = #{salary},</if>
+            <if test="gradeName != null">grade_name = #{gradeName},</if>
+            <if test="xueyuan != null">xueyuan = #{xueyuan},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deletePerAttendanceById" parameterType="Long">
+        delete from per_attendance where id = #{id}
+    </delete>
+
+    <delete id="deletePerAttendanceByIds" parameterType="String">
+        delete from per_attendance where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.grade.air.mapper.SsDormitoryMaintenanceMapper">
+    
+    <resultMap type="SsDormitoryMaintenance" id="SsDormitoryMaintenanceResult">
+        <result property="maintenanceId"    column="maintenance_id"    />
+        <result property="dormitoryName"    column="dormitory_name"    />
+        <result property="reportDate"    column="report_date"    />
+        <result property="reportDescription"    column="report_description"    />
+    </resultMap>
+
+    <sql id="selectSsDormitoryMaintenanceVo">
+        select maintenance_id, dormitory_name, report_date, report_description from ss_dormitory_maintenance
+    </sql>
+
+    <select id="selectSsDormitoryMaintenanceList" parameterType="SsDormitoryMaintenance" resultMap="SsDormitoryMaintenanceResult">
+        <include refid="selectSsDormitoryMaintenanceVo"/>
+        <where>  
+        </where>
+    </select>
+    
+    <select id="selectSsDormitoryMaintenanceByMaintenanceId" parameterType="Long" resultMap="SsDormitoryMaintenanceResult">
+        <include refid="selectSsDormitoryMaintenanceVo"/>
+        where maintenance_id = #{maintenanceId}
+    </select>
+        
+    <insert id="insertSsDormitoryMaintenance" parameterType="SsDormitoryMaintenance" useGeneratedKeys="true" keyProperty="maintenanceId">
+        insert into ss_dormitory_maintenance
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="dormitoryName != null">dormitory_name,</if>
+            <if test="reportDate != null">report_date,</if>
+            <if test="reportDescription != null">report_description,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="dormitoryName != null">#{dormitoryName},</if>
+            <if test="reportDate != null">#{reportDate},</if>
+            <if test="reportDescription != null">#{reportDescription},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSsDormitoryMaintenance" parameterType="SsDormitoryMaintenance">
+        update ss_dormitory_maintenance
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="dormitoryName != null">dormitory_name = #{dormitoryName},</if>
+            <if test="reportDate != null">report_date = #{reportDate},</if>
+            <if test="reportDescription != null">report_description = #{reportDescription},</if>
+        </trim>
+        where maintenance_id = #{maintenanceId}
+    </update>
+
+    <delete id="deleteSsDormitoryMaintenanceByMaintenanceId" parameterType="Long">
+        delete from ss_dormitory_maintenance where maintenance_id = #{maintenanceId}
+    </delete>
+
+    <delete id="deleteSsDormitoryMaintenanceByMaintenanceIds" parameterType="String">
+        delete from ss_dormitory_maintenance where maintenance_id in 
+        <foreach item="maintenanceId" collection="array" open="(" separator="," close=")">
+            #{maintenanceId}
+        </foreach>
+    </delete>
+</mapper>

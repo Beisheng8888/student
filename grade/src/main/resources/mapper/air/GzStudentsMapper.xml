@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.grade.air.mapper.GzStudentsMapper">
+    
+    <resultMap type="GzStudents" id="GzStudentsResult">
+        <result property="studentID"    column="studentID"    />
+        <result property="name"    column="name"    />
+        <result property="age"    column="age"    />
+        <result property="gender"    column="gender"    />
+        <result property="dateOfBirth"    column="dateOfBirth"    />
+        <result property="address"    column="address"    />
+        <result property="phone"    column="phone"    />
+        <result property="userId"    column="user_id"    />
+    </resultMap>
+
+    <sql id="selectGzStudentsVo">
+        select studentID, name, age, gender, dateOfBirth, address, phone, user_id from gz_students recuit
+    </sql>
+
+    <select id="selectGzStudentsList" parameterType="GzStudents" resultMap="GzStudentsResult">
+        <include refid="selectGzStudentsVo"/>
+        <where>
+            ${params.dataScope}
+        </where>
+    </select>
+    
+    <select id="selectGzStudentsByStudentID" parameterType="Long" resultMap="GzStudentsResult">
+        <include refid="selectGzStudentsVo"/>
+        where studentID = #{studentID}
+    </select>
+        
+    <insert id="insertGzStudents" parameterType="GzStudents" useGeneratedKeys="true" keyProperty="studentID">
+        insert into gz_students
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">name,</if>
+            <if test="age != null">age,</if>
+            <if test="gender != null">gender,</if>
+            <if test="dateOfBirth != null">dateOfBirth,</if>
+            <if test="address != null">address,</if>
+            <if test="phone != null">phone,</if>
+            <if test="userId != null">user_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null">#{name},</if>
+            <if test="age != null">#{age},</if>
+            <if test="gender != null">#{gender},</if>
+            <if test="dateOfBirth != null">#{dateOfBirth},</if>
+            <if test="address != null">#{address},</if>
+            <if test="phone != null">#{phone},</if>
+            <if test="userId != null">#{userId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateGzStudents" parameterType="GzStudents">
+        update gz_students
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null">name = #{name},</if>
+            <if test="age != null">age = #{age},</if>
+            <if test="gender != null">gender = #{gender},</if>
+            <if test="dateOfBirth != null">dateOfBirth = #{dateOfBirth},</if>
+            <if test="address != null">address = #{address},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+        </trim>
+        where studentID = #{studentID}
+    </update>
+
+    <delete id="deleteGzStudentsByStudentID" parameterType="Long">
+        delete from gz_students where studentID = #{studentID}
+    </delete>
+
+    <delete id="deleteGzStudentsByStudentIDs" parameterType="String">
+        delete from gz_students where studentID in 
+        <foreach item="studentID" collection="array" open="(" separator="," close=")">
+            #{studentID}
+        </foreach>
+    </delete>
+</mapper>

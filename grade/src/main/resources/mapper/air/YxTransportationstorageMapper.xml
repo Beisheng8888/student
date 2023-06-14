@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.grade.air.mapper.YxTransportationstorageMapper">
+    
+    <resultMap type="YxTransportationstorage" id="YxTransportationstorageResult">
+        <result property="transportationStorageID"    column="transportationStorageID"    />
+        <result property="studentName"    column="studentName"    />
+        <result property="serviceType"    column="serviceType"    />
+        <result property="serviceTime"    column="serviceTime"    />
+        <result property="serviceLocation"    column="serviceLocation"    />
+        <result property="userId"    column="user_id"    />
+    </resultMap>
+
+    <sql id="selectYxTransportationstorageVo">
+        select transportationStorageID, studentName, serviceType,
+         serviceTime, serviceLocation,
+          user_id from yx_transportationstorage recuit
+    </sql>
+
+    <select id="selectYxTransportationstorageList" parameterType="YxTransportationstorage" resultMap="YxTransportationstorageResult">
+        <include refid="selectYxTransportationstorageVo"/>
+        <where>
+            ${params.dataScope}
+        </where>
+    </select>
+    
+    <select id="selectYxTransportationstorageByTransportationStorageID" parameterType="Long" resultMap="YxTransportationstorageResult">
+        <include refid="selectYxTransportationstorageVo"/>
+        where transportationStorageID = #{transportationStorageID}
+    </select>
+        
+    <insert id="insertYxTransportationstorage" parameterType="YxTransportationstorage" useGeneratedKeys="true" keyProperty="transportationStorageID">
+        insert into yx_transportationstorage
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="studentName != null">studentName,</if>
+            <if test="serviceType != null">serviceType,</if>
+            <if test="serviceTime != null">serviceTime,</if>
+            <if test="serviceLocation != null">serviceLocation,</if>
+            <if test="userId != null">user_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="studentName != null">#{studentName},</if>
+            <if test="serviceType != null">#{serviceType},</if>
+            <if test="serviceTime != null">#{serviceTime},</if>
+            <if test="serviceLocation != null">#{serviceLocation},</if>
+            <if test="userId != null">#{userId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateYxTransportationstorage" parameterType="YxTransportationstorage">
+        update yx_transportationstorage
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="studentName != null">studentName = #{studentName},</if>
+            <if test="serviceType != null">serviceType = #{serviceType},</if>
+            <if test="serviceTime != null">serviceTime = #{serviceTime},</if>
+            <if test="serviceLocation != null">serviceLocation = #{serviceLocation},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+        </trim>
+        where transportationStorageID = #{transportationStorageID}
+    </update>
+
+    <delete id="deleteYxTransportationstorageByTransportationStorageID" parameterType="Long">
+        delete from yx_transportationstorage where transportationStorageID = #{transportationStorageID}
+    </delete>
+
+    <delete id="deleteYxTransportationstorageByTransportationStorageIDs" parameterType="String">
+        delete from yx_transportationstorage where transportationStorageID in 
+        <foreach item="transportationStorageID" collection="array" open="(" separator="," close=")">
+            #{transportationStorageID}
+        </foreach>
+    </delete>
+</mapper>

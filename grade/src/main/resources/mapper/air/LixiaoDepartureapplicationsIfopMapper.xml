@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.grade.air.mapper.LixiaoDepartureapplicationsIfopMapper">
+    
+    <resultMap type="LixiaoDepartureapplicationsIfop" id="LixiaoDepartureapplicationsIfopResult">
+        <result property="id"    column="id"    />
+        <result property="studentName"    column="studentName"    />
+        <result property="applicationDate"    column="applicationDate"    />
+        <result property="departureDate"    column="departureDate"    />
+        <result property="reason"    column="reason"    />
+        <result property="status"    column="status"    />
+        <result property="userId"    column="user_id"    />
+        <result property="statusSjfh"    column="status_sjfh"    />
+    </resultMap>
+
+    <sql id="selectLixiaoDepartureapplicationsIfopVo">
+        select id, studentName, applicationDate,
+        departureDate, reason, status, user_id,
+        status_sjfh from lixiao_departureapplications_ifop
+    </sql>
+
+    <select id="selectLixiaoDepartureapplicationsIfopList" parameterType="LixiaoDepartureapplicationsIfop" resultMap="LixiaoDepartureapplicationsIfopResult">
+        <include refid="selectLixiaoDepartureapplicationsIfopVo"/>
+        <where>  
+        </where>
+    </select>
+    
+    <select id="selectLixiaoDepartureapplicationsIfopById" parameterType="Long" resultMap="LixiaoDepartureapplicationsIfopResult">
+        <include refid="selectLixiaoDepartureapplicationsIfopVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertLixiaoDepartureapplicationsIfop" parameterType="LixiaoDepartureapplicationsIfop" useGeneratedKeys="true" keyProperty="id">
+        insert into lixiao_departureapplications_ifop
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="studentName != null">studentName,</if>
+            <if test="applicationDate != null">applicationDate,</if>
+            <if test="departureDate != null">departureDate,</if>
+            <if test="reason != null">reason,</if>
+            <if test="status != null">status,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="statusSjfh != null">status_sjfh,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="studentName != null">#{studentName},</if>
+            <if test="applicationDate != null">#{applicationDate},</if>
+            <if test="departureDate != null">#{departureDate},</if>
+            <if test="reason != null">#{reason},</if>
+            <if test="status != null">#{status},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="statusSjfh != null">#{statusSjfh},</if>
+         </trim>
+    </insert>
+
+    <update id="updateLixiaoDepartureapplicationsIfop" parameterType="LixiaoDepartureapplicationsIfop">
+        update lixiao_departureapplications_ifop
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="studentName != null">studentName = #{studentName},</if>
+            <if test="applicationDate != null">applicationDate = #{applicationDate},</if>
+            <if test="departureDate != null">departureDate = #{departureDate},</if>
+            <if test="reason != null">reason = #{reason},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="statusSjfh != null">status_sjfh = #{statusSjfh},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteLixiaoDepartureapplicationsIfopById" parameterType="Long">
+        delete from lixiao_departureapplications_ifop where id = #{id}
+    </delete>
+
+    <delete id="deleteLixiaoDepartureapplicationsIfopByIds" parameterType="String">
+        delete from lixiao_departureapplications_ifop where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

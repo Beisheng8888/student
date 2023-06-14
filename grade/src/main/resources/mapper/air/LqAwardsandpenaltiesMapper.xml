@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.grade.air.mapper.LqAwardsandpenaltiesMapper">
+    
+    <resultMap type="LqAwardsandpenalties" id="LqAwardsandpenaltiesResult">
+        <result property="studentID"    column="studentID"    />
+        <result property="type"    column="type"    />
+        <result property="description"    column="description"    />
+    </resultMap>
+
+    <sql id="selectLqAwardsandpenaltiesVo">
+        select studentID, type, description from lq_awardsandpenalties
+    </sql>
+
+    <select id="selectLqAwardsandpenaltiesList" parameterType="LqAwardsandpenalties" resultMap="LqAwardsandpenaltiesResult">
+        <include refid="selectLqAwardsandpenaltiesVo"/>
+        <where>  
+        </where>
+    </select>
+    
+    <select id="selectLqAwardsandpenaltiesByStudentID" parameterType="Long" resultMap="LqAwardsandpenaltiesResult">
+        <include refid="selectLqAwardsandpenaltiesVo"/>
+        where studentID = #{studentID}
+    </select>
+        
+    <insert id="insertLqAwardsandpenalties" parameterType="LqAwardsandpenalties" useGeneratedKeys="true" keyProperty="studentID">
+        insert into lq_awardsandpenalties
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="type != null">type,</if>
+            <if test="description != null">description,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="type != null">#{type},</if>
+            <if test="description != null">#{description},</if>
+         </trim>
+    </insert>
+
+    <update id="updateLqAwardsandpenalties" parameterType="LqAwardsandpenalties">
+        update lq_awardsandpenalties
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="type != null">type = #{type},</if>
+            <if test="description != null">description = #{description},</if>
+        </trim>
+        where studentID = #{studentID}
+    </update>
+
+    <delete id="deleteLqAwardsandpenaltiesByStudentID" parameterType="Long">
+        delete from lq_awardsandpenalties where studentID = #{studentID}
+    </delete>
+
+    <delete id="deleteLqAwardsandpenaltiesByStudentIDs" parameterType="String">
+        delete from lq_awardsandpenalties where studentID in 
+        <foreach item="studentID" collection="array" open="(" separator="," close=")">
+            #{studentID}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.grade.air.mapper.LqGerendanganMapper">
+    
+    <resultMap type="LqGerendangan" id="LqGerendanganResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="gender"    column="gender"    />
+        <result property="dateBirth"    column="dateBirth"    />
+        <result property="idcardNumber"    column="idcardNumber"    />
+        <result property="homeAddress"    column="homeAddress"    />
+        <result property="contactNumber"    column="contactNumber"    />
+        <result property="email"    column="email"    />
+        <result property="avatar"    column="avatar"    />
+        <result property="academicSystem"    column="academicSystem"    />
+        <result property="department"    column="department"    />
+        <result property="major"    column="major"    />
+        <result property="type"    column="type"    />
+        <result property="subject"    column="subject"    />
+        <result property="grade"    column="grade"    />
+        <result property="gpa"    column="gpa"    />
+        <result property="rank"    column="rank"    />
+        <result property="credits"    column="credits"    />
+        <result property="userId"    column="user_id"    />
+    </resultMap>
+
+    <sql id="selectLqGerendanganVo">
+        select id, name, gender, dateBirth, idcardNumber, homeAddress,
+         contactNumber, email, avatar, academicSystem, department, major,
+          type, subject, grade, gpa, rank, credits, user_id from lq_gerendangan recuit
+    </sql>
+
+    <select id="selectLqGerendanganList" parameterType="LqGerendangan" resultMap="LqGerendanganResult">
+        <include refid="selectLqGerendanganVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            ${params.dataScope}
+        </where>
+    </select>
+    
+    <select id="selectLqGerendanganById" parameterType="Long" resultMap="LqGerendanganResult">
+        <include refid="selectLqGerendanganVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertLqGerendangan" parameterType="LqGerendangan" useGeneratedKeys="true" keyProperty="id">
+        insert into lq_gerendangan
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">name,</if>
+            <if test="gender != null">gender,</if>
+            <if test="dateBirth != null">dateBirth,</if>
+            <if test="idcardNumber != null">idcardNumber,</if>
+            <if test="homeAddress != null">homeAddress,</if>
+            <if test="contactNumber != null">contactNumber,</if>
+            <if test="email != null">email,</if>
+            <if test="avatar != null">avatar,</if>
+            <if test="academicSystem != null">academicSystem,</if>
+            <if test="department != null">department,</if>
+            <if test="major != null">major,</if>
+            <if test="type != null">type,</if>
+            <if test="subject != null">subject,</if>
+            <if test="grade != null">grade,</if>
+            <if test="gpa != null">gpa,</if>
+            <if test="rank != null">rank,</if>
+            <if test="credits != null">credits,</if>
+            <if test="userId != null">user_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null">#{name},</if>
+            <if test="gender != null">#{gender},</if>
+            <if test="dateBirth != null">#{dateBirth},</if>
+            <if test="idcardNumber != null">#{idcardNumber},</if>
+            <if test="homeAddress != null">#{homeAddress},</if>
+            <if test="contactNumber != null">#{contactNumber},</if>
+            <if test="email != null">#{email},</if>
+            <if test="avatar != null">#{avatar},</if>
+            <if test="academicSystem != null">#{academicSystem},</if>
+            <if test="department != null">#{department},</if>
+            <if test="major != null">#{major},</if>
+            <if test="type != null">#{type},</if>
+            <if test="subject != null">#{subject},</if>
+            <if test="grade != null">#{grade},</if>
+            <if test="gpa != null">#{gpa},</if>
+            <if test="rank != null">#{rank},</if>
+            <if test="credits != null">#{credits},</if>
+            <if test="userId != null">#{userId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateLqGerendangan" parameterType="LqGerendangan">
+        update lq_gerendangan
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null">name = #{name},</if>
+            <if test="gender != null">gender = #{gender},</if>
+            <if test="dateBirth != null">dateBirth = #{dateBirth},</if>
+            <if test="idcardNumber != null">idcardNumber = #{idcardNumber},</if>
+            <if test="homeAddress != null">homeAddress = #{homeAddress},</if>
+            <if test="contactNumber != null">contactNumber = #{contactNumber},</if>
+            <if test="email != null">email = #{email},</if>
+            <if test="avatar != null">avatar = #{avatar},</if>
+            <if test="academicSystem != null">academicSystem = #{academicSystem},</if>
+            <if test="department != null">department = #{department},</if>
+            <if test="major != null">major = #{major},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="subject != null">subject = #{subject},</if>
+            <if test="grade != null">grade = #{grade},</if>
+            <if test="gpa != null">gpa = #{gpa},</if>
+            <if test="rank != null">rank = #{rank},</if>
+            <if test="credits != null">credits = #{credits},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteLqGerendanganById" parameterType="Long">
+        delete from lq_gerendangan where id = #{id}
+    </delete>
+
+    <delete id="deleteLqGerendanganByIds" parameterType="String">
+        delete from lq_gerendangan where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

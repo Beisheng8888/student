@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.grade.air.mapper.YxOpRegistrationProcessMapper">
+    
+    <resultMap type="YxOpRegistrationProcess" id="YxOpRegistrationProcessResult">
+        <result property="recordId"    column="record_id"    />
+        <result property="name"    column="name"    />
+        <result property="studentNumber"    column="student_number"    />
+        <result property="submissionTime"    column="submission_time"    />
+        <result property="arrivalTime"    column="arrival_time"    />
+        <result property="arrivalLocation"    column="arrival_location"    />
+        <result property="approvalStatus"    column="approval_status"    />
+        <result property="approver"    column="approver"    />
+        <result property="userId"    column="user_id"    />
+    </resultMap>
+
+    <sql id="selectYxOpRegistrationProcessVo">
+        select record_id, name, student_number, submission_time,
+        arrival_time, arrival_location, approval_status, approver,
+        user_id from yx_op_registration_process recuit
+    </sql>
+
+    <select id="selectYxOpRegistrationProcessList" parameterType="YxOpRegistrationProcess" resultMap="YxOpRegistrationProcessResult">
+        <include refid="selectYxOpRegistrationProcessVo"/>
+        <where>
+            ${params.dataScope}
+        </where>
+    </select>
+    
+    <select id="selectYxOpRegistrationProcessByRecordId" parameterType="Long" resultMap="YxOpRegistrationProcessResult">
+        <include refid="selectYxOpRegistrationProcessVo"/>
+        where record_id = #{recordId}
+    </select>
+        
+    <insert id="insertYxOpRegistrationProcess" parameterType="YxOpRegistrationProcess" useGeneratedKeys="true" keyProperty="recordId">
+        insert into yx_op_registration_process
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">name,</if>
+            <if test="studentNumber != null and studentNumber != ''">student_number,</if>
+            <if test="submissionTime != null">submission_time,</if>
+            <if test="arrivalTime != null">arrival_time,</if>
+            <if test="arrivalLocation != null">arrival_location,</if>
+            <if test="approvalStatus != null">approval_status,</if>
+            <if test="approver != null">approver,</if>
+            <if test="userId != null">user_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="studentNumber != null and studentNumber != ''">#{studentNumber},</if>
+            <if test="submissionTime != null">#{submissionTime},</if>
+            <if test="arrivalTime != null">#{arrivalTime},</if>
+            <if test="arrivalLocation != null">#{arrivalLocation},</if>
+            <if test="approvalStatus != null">#{approvalStatus},</if>
+            <if test="approver != null">#{approver},</if>
+            <if test="userId != null">#{userId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateYxOpRegistrationProcess" parameterType="YxOpRegistrationProcess">
+        update yx_op_registration_process
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="studentNumber != null and studentNumber != ''">student_number = #{studentNumber},</if>
+            <if test="submissionTime != null">submission_time = #{submissionTime},</if>
+            <if test="arrivalTime != null">arrival_time = #{arrivalTime},</if>
+            <if test="arrivalLocation != null">arrival_location = #{arrivalLocation},</if>
+            <if test="approvalStatus != null">approval_status = #{approvalStatus},</if>
+            <if test="approver != null">approver = #{approver},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+        </trim>
+        where record_id = #{recordId}
+    </update>
+
+    <delete id="deleteYxOpRegistrationProcessByRecordId" parameterType="Long">
+        delete from yx_op_registration_process where record_id = #{recordId}
+    </delete>
+
+    <delete id="deleteYxOpRegistrationProcessByRecordIds" parameterType="String">
+        delete from yx_op_registration_process where record_id in 
+        <foreach item="recordId" collection="array" open="(" separator="," close=")">
+            #{recordId}
+        </foreach>
+    </delete>
+</mapper>

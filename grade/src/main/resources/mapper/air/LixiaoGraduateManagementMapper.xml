@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.grade.air.mapper.LixiaoGraduateManagementMapper">
+    
+    <resultMap type="LixiaoGraduateManagement" id="LixiaoGraduateManagementResult">
+        <result property="studentId"    column="student_id"    />
+        <result property="name"    column="name"    />
+        <result property="studentNumber"    column="student_number"    />
+        <result property="major"    column="major"    />
+        <result property="enrollmentDate"    column="enrollment_date"    />
+        <result property="graduationDate"    column="graduation_date"    />
+        <result property="thesisTitle"    column="thesis_title"    />
+        <result property="supervisor"    column="supervisor"    />
+        <result property="gpa"    column="gpa"    />
+        <result property="certificateNumber"    column="certificate_number"    />
+        <result property="userId"    column="user_id"    />
+    </resultMap>
+
+    <sql id="selectLixiaoGraduateManagementVo">
+        select student_id, name, student_number, major, enrollment_date, graduation_date, thesis_title, supervisor, gpa, certificate_number, user_id from lixiao_graduate_management
+    </sql>
+
+    <select id="selectLixiaoGraduateManagementList" parameterType="LixiaoGraduateManagement" resultMap="LixiaoGraduateManagementResult">
+        <include refid="selectLixiaoGraduateManagementVo"/>
+        <where>  
+        </where>
+    </select>
+    
+    <select id="selectLixiaoGraduateManagementByStudentId" parameterType="Long" resultMap="LixiaoGraduateManagementResult">
+        <include refid="selectLixiaoGraduateManagementVo"/>
+        where student_id = #{studentId}
+    </select>
+        
+    <insert id="insertLixiaoGraduateManagement" parameterType="LixiaoGraduateManagement" useGeneratedKeys="true" keyProperty="studentId">
+        insert into lixiao_graduate_management
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">name,</if>
+            <if test="studentNumber != null">student_number,</if>
+            <if test="major != null">major,</if>
+            <if test="enrollmentDate != null">enrollment_date,</if>
+            <if test="graduationDate != null">graduation_date,</if>
+            <if test="thesisTitle != null">thesis_title,</if>
+            <if test="supervisor != null">supervisor,</if>
+            <if test="gpa != null">gpa,</if>
+            <if test="certificateNumber != null">certificate_number,</if>
+            <if test="userId != null">user_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null">#{name},</if>
+            <if test="studentNumber != null">#{studentNumber},</if>
+            <if test="major != null">#{major},</if>
+            <if test="enrollmentDate != null">#{enrollmentDate},</if>
+            <if test="graduationDate != null">#{graduationDate},</if>
+            <if test="thesisTitle != null">#{thesisTitle},</if>
+            <if test="supervisor != null">#{supervisor},</if>
+            <if test="gpa != null">#{gpa},</if>
+            <if test="certificateNumber != null">#{certificateNumber},</if>
+            <if test="userId != null">#{userId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateLixiaoGraduateManagement" parameterType="LixiaoGraduateManagement">
+        update lixiao_graduate_management
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null">name = #{name},</if>
+            <if test="studentNumber != null">student_number = #{studentNumber},</if>
+            <if test="major != null">major = #{major},</if>
+            <if test="enrollmentDate != null">enrollment_date = #{enrollmentDate},</if>
+            <if test="graduationDate != null">graduation_date = #{graduationDate},</if>
+            <if test="thesisTitle != null">thesis_title = #{thesisTitle},</if>
+            <if test="supervisor != null">supervisor = #{supervisor},</if>
+            <if test="gpa != null">gpa = #{gpa},</if>
+            <if test="certificateNumber != null">certificate_number = #{certificateNumber},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+        </trim>
+        where student_id = #{studentId}
+    </update>
+
+    <delete id="deleteLixiaoGraduateManagementByStudentId" parameterType="Long">
+        delete from lixiao_graduate_management where student_id = #{studentId}
+    </delete>
+
+    <delete id="deleteLixiaoGraduateManagementByStudentIds" parameterType="String">
+        delete from lixiao_graduate_management where student_id in 
+        <foreach item="studentId" collection="array" open="(" separator="," close=")">
+            #{studentId}
+        </foreach>
+    </delete>
+</mapper>

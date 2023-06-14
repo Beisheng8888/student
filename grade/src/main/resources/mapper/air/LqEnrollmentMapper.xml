@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.grade.air.mapper.LqEnrollmentMapper">
+    
+    <resultMap type="LqEnrollment" id="LqEnrollmentResult">
+        <result property="studentID"    column="studentID"    />
+        <result property="gradeClass"    column="grade_class"    />
+        <result property="admissionDate"    column="admissionDate"    />
+        <result property="academicSystem"    column="academicSystem"    />
+        <result property="department"    column="department"    />
+        <result property="major"    column="major"    />
+        <result property="studentName"    column="student_Name"    />
+        <result property="userId"    column="user_id"    />
+    </resultMap>
+
+    <sql id="selectLqEnrollmentVo">
+        select studentID, grade_class, admissionDate,
+         academicSystem, department, major, student_Name, user_id from lq_enrollment recuit
+    </sql>
+
+    <select id="selectLqEnrollmentList" parameterType="LqEnrollment" resultMap="LqEnrollmentResult">
+        <include refid="selectLqEnrollmentVo"/>
+        <where>  
+            <if test="studentName != null  and studentName != ''"> and student_Name like concat('%', #{studentName}, '%')</if>
+            ${params.dataScope}
+        </where>
+    </select>
+    
+    <select id="selectLqEnrollmentByStudentID" parameterType="Long" resultMap="LqEnrollmentResult">
+        <include refid="selectLqEnrollmentVo"/>
+        where studentID = #{studentID}
+    </select>
+        
+    <insert id="insertLqEnrollment" parameterType="LqEnrollment" useGeneratedKeys="true" keyProperty="studentID">
+        insert into lq_enrollment
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="gradeClass != null">grade_class,</if>
+            <if test="admissionDate != null">admissionDate,</if>
+            <if test="academicSystem != null">academicSystem,</if>
+            <if test="department != null">department,</if>
+            <if test="major != null">major,</if>
+            <if test="studentName != null">student_Name,</if>
+            <if test="userId != null">user_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="gradeClass != null">#{gradeClass},</if>
+            <if test="admissionDate != null">#{admissionDate},</if>
+            <if test="academicSystem != null">#{academicSystem},</if>
+            <if test="department != null">#{department},</if>
+            <if test="major != null">#{major},</if>
+            <if test="studentName != null">#{studentName},</if>
+            <if test="userId != null">#{userId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateLqEnrollment" parameterType="LqEnrollment">
+        update lq_enrollment
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="gradeClass != null">grade_class = #{gradeClass},</if>
+            <if test="admissionDate != null">admissionDate = #{admissionDate},</if>
+            <if test="academicSystem != null">academicSystem = #{academicSystem},</if>
+            <if test="department != null">department = #{department},</if>
+            <if test="major != null">major = #{major},</if>
+            <if test="studentName != null">student_Name = #{studentName},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+        </trim>
+        where studentID = #{studentID}
+    </update>
+
+    <delete id="deleteLqEnrollmentByStudentID" parameterType="Long">
+        delete from lq_enrollment where studentID = #{studentID}
+    </delete>
+
+    <delete id="deleteLqEnrollmentByStudentIDs" parameterType="String">
+        delete from lq_enrollment where studentID in 
+        <foreach item="studentID" collection="array" open="(" separator="," close=")">
+            #{studentID}
+        </foreach>
+    </delete>
+</mapper>

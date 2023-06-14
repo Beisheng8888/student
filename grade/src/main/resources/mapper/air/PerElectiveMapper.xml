@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.grade.air.mapper.PerElectiveMapper">
+    
+    <resultMap type="PerElective" id="PerElectiveResult">
+        <result property="id"    column="id"    />
+        <result property="liberal"    column="liberal"    />
+        <result property="major"    column="major"    />
+        <result property="elective"    column="elective"    />
+        <result property="gradeName"    column="grade_name"    />
+    </resultMap>
+
+    <sql id="selectPerElectiveVo">
+        select id, liberal, major, elective, grade_name from per_elective
+    </sql>
+
+    <select id="selectPerElectiveList" parameterType="PerElective" resultMap="PerElectiveResult">
+        <include refid="selectPerElectiveVo"/>
+        <where>  
+        </where>
+    </select>
+    
+    <select id="selectPerElectiveById" parameterType="Long" resultMap="PerElectiveResult">
+        <include refid="selectPerElectiveVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertPerElective" parameterType="PerElective" useGeneratedKeys="true" keyProperty="id">
+        insert into per_elective
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="liberal != null">liberal,</if>
+            <if test="major != null">major,</if>
+            <if test="elective != null">elective,</if>
+            <if test="gradeName != null">grade_name,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="liberal != null">#{liberal},</if>
+            <if test="major != null">#{major},</if>
+            <if test="elective != null">#{elective},</if>
+            <if test="gradeName != null">#{gradeName},</if>
+         </trim>
+    </insert>
+
+    <update id="updatePerElective" parameterType="PerElective">
+        update per_elective
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="liberal != null">liberal = #{liberal},</if>
+            <if test="major != null">major = #{major},</if>
+            <if test="elective != null">elective = #{elective},</if>
+            <if test="gradeName != null">grade_name = #{gradeName},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deletePerElectiveById" parameterType="Long">
+        delete from per_elective where id = #{id}
+    </delete>
+
+    <delete id="deletePerElectiveByIds" parameterType="String">
+        delete from per_elective where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

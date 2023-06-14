@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.grade.air.mapper.SsSanitationInspectionNoticeMapper">
+    
+    <resultMap type="SsSanitationInspectionNotice" id="SsSanitationInspectionNoticeResult">
+        <result property="inspectionId"    column="inspection_id"    />
+        <result property="inspectionDate"    column="inspection_date"    />
+        <result property="remarks"    column="remarks"    />
+    </resultMap>
+
+    <sql id="selectSsSanitationInspectionNoticeVo">
+        select inspection_id, inspection_date, remarks from ss_sanitation_inspection_notice
+    </sql>
+
+    <select id="selectSsSanitationInspectionNoticeList" parameterType="SsSanitationInspectionNotice" resultMap="SsSanitationInspectionNoticeResult">
+        <include refid="selectSsSanitationInspectionNoticeVo"/>
+        <where>  
+        </where>
+    </select>
+    
+    <select id="selectSsSanitationInspectionNoticeByInspectionId" parameterType="Long" resultMap="SsSanitationInspectionNoticeResult">
+        <include refid="selectSsSanitationInspectionNoticeVo"/>
+        where inspection_id = #{inspectionId}
+    </select>
+        
+    <insert id="insertSsSanitationInspectionNotice" parameterType="SsSanitationInspectionNotice" useGeneratedKeys="true" keyProperty="inspectionId">
+        insert into ss_sanitation_inspection_notice
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="inspectionDate != null">inspection_date,</if>
+            <if test="remarks != null">remarks,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="inspectionDate != null">#{inspectionDate},</if>
+            <if test="remarks != null">#{remarks},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSsSanitationInspectionNotice" parameterType="SsSanitationInspectionNotice">
+        update ss_sanitation_inspection_notice
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="inspectionDate != null">inspection_date = #{inspectionDate},</if>
+            <if test="remarks != null">remarks = #{remarks},</if>
+        </trim>
+        where inspection_id = #{inspectionId}
+    </update>
+
+    <delete id="deleteSsSanitationInspectionNoticeByInspectionId" parameterType="Long">
+        delete from ss_sanitation_inspection_notice where inspection_id = #{inspectionId}
+    </delete>
+
+    <delete id="deleteSsSanitationInspectionNoticeByInspectionIds" parameterType="String">
+        delete from ss_sanitation_inspection_notice where inspection_id in 
+        <foreach item="inspectionId" collection="array" open="(" separator="," close=")">
+            #{inspectionId}
+        </foreach>
+    </delete>
+</mapper>

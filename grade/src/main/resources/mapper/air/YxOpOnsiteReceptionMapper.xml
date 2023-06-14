@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.grade.air.mapper.YxOpOnsiteReceptionMapper">
+    
+    <resultMap type="YxOpOnsiteReception" id="YxOpOnsiteReceptionResult">
+        <result property="recordId"    column="record_id"    />
+        <result property="studentName"    column="student_name"    />
+        <result property="receptionist"    column="receptionist"    />
+        <result property="receptionDate"    column="reception_date"    />
+        <result property="receptionTime"    column="reception_time"    />
+        <result property="issueDescription"    column="issue_description"    />
+        <result property="receptionRemarks"    column="reception_remarks"    />
+        <result property="userId"    column="user_id"    />
+    </resultMap>
+
+    <sql id="selectYxOpOnsiteReceptionVo">
+        select record_id, student_name, receptionist,
+        reception_date, reception_time, issue_description,
+        reception_remarks, user_id from yx_op_onsite_reception recuit
+    </sql>
+
+    <select id="selectYxOpOnsiteReceptionList" parameterType="YxOpOnsiteReception" resultMap="YxOpOnsiteReceptionResult">
+        <include refid="selectYxOpOnsiteReceptionVo"/>
+        <where>
+            ${params.dataScope}
+        </where>
+    </select>
+    
+    <select id="selectYxOpOnsiteReceptionByRecordId" parameterType="Long" resultMap="YxOpOnsiteReceptionResult">
+        <include refid="selectYxOpOnsiteReceptionVo"/>
+        where record_id = #{recordId}
+    </select>
+        
+    <insert id="insertYxOpOnsiteReception" parameterType="YxOpOnsiteReception" useGeneratedKeys="true" keyProperty="recordId">
+        insert into yx_op_onsite_reception
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="studentName != null">student_name,</if>
+            <if test="receptionist != null">receptionist,</if>
+            <if test="receptionDate != null">reception_date,</if>
+            <if test="receptionTime != null">reception_time,</if>
+            <if test="issueDescription != null">issue_description,</if>
+            <if test="receptionRemarks != null">reception_remarks,</if>
+            <if test="userId != null">user_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="studentName != null">#{studentName},</if>
+            <if test="receptionist != null">#{receptionist},</if>
+            <if test="receptionDate != null">#{receptionDate},</if>
+            <if test="receptionTime != null">#{receptionTime},</if>
+            <if test="issueDescription != null">#{issueDescription},</if>
+            <if test="receptionRemarks != null">#{receptionRemarks},</if>
+            <if test="userId != null">#{userId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateYxOpOnsiteReception" parameterType="YxOpOnsiteReception">
+        update yx_op_onsite_reception
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="studentName != null">student_name = #{studentName},</if>
+            <if test="receptionist != null">receptionist = #{receptionist},</if>
+            <if test="receptionDate != null">reception_date = #{receptionDate},</if>
+            <if test="receptionTime != null">reception_time = #{receptionTime},</if>
+            <if test="issueDescription != null">issue_description = #{issueDescription},</if>
+            <if test="receptionRemarks != null">reception_remarks = #{receptionRemarks},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+        </trim>
+        where record_id = #{recordId}
+    </update>
+
+    <delete id="deleteYxOpOnsiteReceptionByRecordId" parameterType="Long">
+        delete from yx_op_onsite_reception where record_id = #{recordId}
+    </delete>
+
+    <delete id="deleteYxOpOnsiteReceptionByRecordIds" parameterType="String">
+        delete from yx_op_onsite_reception where record_id in 
+        <foreach item="recordId" collection="array" open="(" separator="," close=")">
+            #{recordId}
+        </foreach>
+    </delete>
+</mapper>

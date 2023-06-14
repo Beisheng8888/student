@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.grade.air.mapper.SsDormitoryViolationMapper">
+    
+    <resultMap type="SsDormitoryViolation" id="SsDormitoryViolationResult">
+        <result property="violationId"    column="violation_id"    />
+        <result property="studentName"    column="student_name"    />
+        <result property="violationDate"    column="violation_date"    />
+        <result property="description"    column="description"    />
+        <result property="userId"    column="user_id"    />
+    </resultMap>
+
+    <sql id="selectSsDormitoryViolationVo">
+        select violation_id, student_name, violation_date, description,
+         user_id from ss_dormitory_violation recuit
+    </sql>
+
+    <select id="selectSsDormitoryViolationList" parameterType="SsDormitoryViolation" resultMap="SsDormitoryViolationResult">
+        <include refid="selectSsDormitoryViolationVo"/>
+        <where>
+            ${params.dataScope}
+        </where>
+    </select>
+    
+    <select id="selectSsDormitoryViolationByViolationId" parameterType="Long" resultMap="SsDormitoryViolationResult">
+        <include refid="selectSsDormitoryViolationVo"/>
+        where violation_id = #{violationId}
+    </select>
+        
+    <insert id="insertSsDormitoryViolation" parameterType="SsDormitoryViolation" useGeneratedKeys="true" keyProperty="violationId">
+        insert into ss_dormitory_violation
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="studentName != null">student_name,</if>
+            <if test="violationDate != null">violation_date,</if>
+            <if test="description != null">description,</if>
+            <if test="userId != null">user_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="studentName != null">#{studentName},</if>
+            <if test="violationDate != null">#{violationDate},</if>
+            <if test="description != null">#{description},</if>
+            <if test="userId != null">#{userId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSsDormitoryViolation" parameterType="SsDormitoryViolation">
+        update ss_dormitory_violation
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="studentName != null">student_name = #{studentName},</if>
+            <if test="violationDate != null">violation_date = #{violationDate},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+        </trim>
+        where violation_id = #{violationId}
+    </update>
+
+    <delete id="deleteSsDormitoryViolationByViolationId" parameterType="Long">
+        delete from ss_dormitory_violation where violation_id = #{violationId}
+    </delete>
+
+    <delete id="deleteSsDormitoryViolationByViolationIds" parameterType="String">
+        delete from ss_dormitory_violation where violation_id in 
+        <foreach item="violationId" collection="array" open="(" separator="," close=")">
+            #{violationId}
+        </foreach>
+    </delete>
+</mapper>

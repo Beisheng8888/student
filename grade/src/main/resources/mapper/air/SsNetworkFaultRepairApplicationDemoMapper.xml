@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.grade.air.mapper.SsNetworkFaultRepairApplicationDemoMapper">
+    
+    <resultMap type="SsNetworkFaultRepairApplicationDemo" id="SsNetworkFaultRepairApplicationDemoResult">
+        <result property="id"    column="id"    />
+        <result property="dormitoryName"    column="dormitory_name"    />
+        <result property="reportDate"    column="report_date"    />
+        <result property="reportDescription"    column="report_description"    />
+        <result property="status"    column="status"    />
+    </resultMap>
+
+    <sql id="selectSsNetworkFaultRepairApplicationDemoVo">
+        select id, dormitory_name, report_date, report_description, status from ss_network_fault_repair_application_demo
+    </sql>
+
+    <select id="selectSsNetworkFaultRepairApplicationDemoList" parameterType="SsNetworkFaultRepairApplicationDemo" resultMap="SsNetworkFaultRepairApplicationDemoResult">
+        <include refid="selectSsNetworkFaultRepairApplicationDemoVo"/>
+        <where>  
+        </where>
+    </select>
+    
+    <select id="selectSsNetworkFaultRepairApplicationDemoById" parameterType="Long" resultMap="SsNetworkFaultRepairApplicationDemoResult">
+        <include refid="selectSsNetworkFaultRepairApplicationDemoVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertSsNetworkFaultRepairApplicationDemo" parameterType="SsNetworkFaultRepairApplicationDemo" useGeneratedKeys="true" keyProperty="id">
+        insert into ss_network_fault_repair_application_demo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="dormitoryName != null">dormitory_name,</if>
+            <if test="reportDate != null">report_date,</if>
+            <if test="reportDescription != null">report_description,</if>
+            <if test="status != null">status,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="dormitoryName != null">#{dormitoryName},</if>
+            <if test="reportDate != null">#{reportDate},</if>
+            <if test="reportDescription != null">#{reportDescription},</if>
+            <if test="status != null">#{status},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSsNetworkFaultRepairApplicationDemo" parameterType="SsNetworkFaultRepairApplicationDemo">
+        update ss_network_fault_repair_application_demo
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="dormitoryName != null">dormitory_name = #{dormitoryName},</if>
+            <if test="reportDate != null">report_date = #{reportDate},</if>
+            <if test="reportDescription != null">report_description = #{reportDescription},</if>
+            <if test="status != null">status = #{status},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSsNetworkFaultRepairApplicationDemoById" parameterType="Long">
+        delete from ss_network_fault_repair_application_demo where id = #{id}
+    </delete>
+
+    <delete id="deleteSsNetworkFaultRepairApplicationDemoByIds" parameterType="String">
+        delete from ss_network_fault_repair_application_demo where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

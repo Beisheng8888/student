@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.grade.air.mapper.LixiaoDeparturenoticesMapper">
+    
+    <resultMap type="LixiaoDeparturenotices" id="LixiaoDeparturenoticesResult">
+        <result property="noticeID"    column="noticeID"    />
+        <result property="title"    column="title"    />
+        <result property="content"    column="content"    />
+        <result property="publishDate"    column="publishDate"    />
+    </resultMap>
+
+    <sql id="selectLixiaoDeparturenoticesVo">
+        select noticeID, title, content, publishDate from lixiao_departurenotices
+    </sql>
+
+    <select id="selectLixiaoDeparturenoticesList" parameterType="LixiaoDeparturenotices" resultMap="LixiaoDeparturenoticesResult">
+        <include refid="selectLixiaoDeparturenoticesVo"/>
+        <where>  
+        </where>
+    </select>
+    
+    <select id="selectLixiaoDeparturenoticesByNoticeID" parameterType="Long" resultMap="LixiaoDeparturenoticesResult">
+        <include refid="selectLixiaoDeparturenoticesVo"/>
+        where noticeID = #{noticeID}
+    </select>
+        
+    <insert id="insertLixiaoDeparturenotices" parameterType="LixiaoDeparturenotices" useGeneratedKeys="true" keyProperty="noticeID">
+        insert into lixiao_departurenotices
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null">title,</if>
+            <if test="content != null">content,</if>
+            <if test="publishDate != null">publishDate,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="title != null">#{title},</if>
+            <if test="content != null">#{content},</if>
+            <if test="publishDate != null">#{publishDate},</if>
+         </trim>
+    </insert>
+
+    <update id="updateLixiaoDeparturenotices" parameterType="LixiaoDeparturenotices">
+        update lixiao_departurenotices
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="title != null">title = #{title},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="publishDate != null">publishDate = #{publishDate},</if>
+        </trim>
+        where noticeID = #{noticeID}
+    </update>
+
+    <delete id="deleteLixiaoDeparturenoticesByNoticeID" parameterType="Long">
+        delete from lixiao_departurenotices where noticeID = #{noticeID}
+    </delete>
+
+    <delete id="deleteLixiaoDeparturenoticesByNoticeIDs" parameterType="String">
+        delete from lixiao_departurenotices where noticeID in 
+        <foreach item="noticeID" collection="array" open="(" separator="," close=")">
+            #{noticeID}
+        </foreach>
+    </delete>
+</mapper>
